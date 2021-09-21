@@ -1,0 +1,16 @@
+# spec: https://github.com/evilmartians/lefthook/blob/master/docs/full_guide.md
+
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      glob: "{task,.hooks/*,*.{sh,bash}}"
+      run: shellcheck {staged_files}
+    fmt:
+      glob: "{task,.hooks/*,*.{sh,bash}}"
+      run: shfmt -l -w {staged_files} && git add {staged_files}
+
+commit-msg:
+  commands:
+    commitlint:
+      run: task commitlint -o interleaved -- -e -V
