@@ -8,7 +8,10 @@ pre-commit:
       run: shellcheck {staged_files}
     fmt:
       glob: "{task,.hooks/*,*.{sh,bash,bats}}"
-      run: shfmt -l -w {staged_files} && git add {staged_files}
+      run: |
+        git stash -q --keep-index &&
+        shfmt -l -w {staged_files} &&
+        git add -u && git stash pop -q
     test:
       glob: "{task,*.bats}"
       # see: https://github.com/evilmartians/lefthook/issues/228#issuecomment-924505331
