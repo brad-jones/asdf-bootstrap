@@ -175,15 +175,6 @@
     cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd
   }
 
-  # see: https://serverfault.com/a/771027
-  function bash_realpath {
-    local path="$1"
-    while [[ -L ${path} && "$(ls -l "${path}")" =~ -\>\ (.*) ]]; do
-      path="${BASH_REMATCH[1]}"
-    done
-    echo "${path}"
-  }
-
   function load_dot_env {
     local path="${1:-.env}"
     if [ -f "${path}" ]; then
