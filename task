@@ -371,13 +371,13 @@
     result="$(
       tar \
         --sort=name \
-        --mtime="2000-01-01 00:00Z" \
-        --owner=0 --group=0 --numeric-owner \
-        --pax-option="exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime" \
-        -cPf - "${path}" | sha512sum
+        --mtime="1970-01-01 00:00:00" \
+        --mode=a+rwX --owner=0 --group=0 --numeric-owner \
+        --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
+        -cPf - "${path}" | sha512sum --binary
     )"
 
-    echo "sha512:${result%  -}"
+    echo "sha512:${result% *-}"
   }
 
   function export_tool_versions {
