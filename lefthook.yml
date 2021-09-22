@@ -9,6 +9,9 @@ pre-commit:
     fmt:
       glob: "{task,.hooks/*,*.{sh,bash}}"
       run: shfmt -l -w {staged_files} && git add {staged_files}
+    test:
+      glob: task
+      run: echo {staged_files} >/dev/null && bats ./tests
 
 commit-msg:
   commands:
