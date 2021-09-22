@@ -1,3 +1,14 @@
+<type>[(optional scope)][!]: <description>
+
+[optional body]
+
+[optional footer(s)]
+# LINE LENGTH GUIDE
+# ======================================================================
+# |<----- preferably using up to 50 chars ------>|<- no more than 72 ->|
+#
+# CONVENTIONAL COMMITS STANDARD
+# ======================================================================
 # Full spec: https://www.conventionalcommits.org/en/v1.0.0
 #
 # TYPE
@@ -34,12 +45,3 @@
 # Footers other than BREAKING CHANGE may be provided and follow a
 # convention similar to the git trailer format.
 # see: https://git-scm.com/docs/git-interpret-trailers
-#
-# LINE LENGTH
-# ======================================================================
-# |<----- preferably using up to 50 chars ------>|<- no more than 72 ->|
-<type>[(optional scope)][!]: <description>
-
-[optional body]
-
-[optional footer(s)]
