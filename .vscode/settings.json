@@ -2,6 +2,7 @@
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
   "files.associations": {
-    "*.gitmessagetpl": "git-commit"
+    "*.gitmessagetpl": "git-commit",
+    "*.bats": "shellscript"
   }
 }

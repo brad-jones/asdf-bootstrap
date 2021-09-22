@@ -4,10 +4,10 @@ pre-commit:
   parallel: true
   commands:
     lint:
-      glob: "{task,.hooks/*,*.{sh,bash}}"
+      glob: "{task,.hooks/*,*.{sh,bash,bats}}"
       run: shellcheck {staged_files}
     fmt:
-      glob: "{task,.hooks/*,*.{sh,bash}}"
+      glob: "{task,.hooks/*,*.{sh,bash,bats}}"
       run: shfmt -l -w {staged_files} && git add {staged_files}
     test:
       glob: task
