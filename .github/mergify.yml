@@ -1,0 +1,49 @@
+queue_rules:
+  - name: default
+    conditions:
+      - check-success=lint
+      - check-success=test (ubuntu-latest)
+      - check-success=test (macos-latest)
+
+pull_request_rules:
+  - name: Merge Approved PRs
+    conditions:
+      - base=master
+      - check-success=lint
+      - check-success=test (ubuntu-latest)
+      - check-success=test (macos-latest)
+      - or:
+          - "#approved-reviews-by>=1"
+          - label=lgtm
+    actions:
+      queue:
+        name: default
+        method: squash
+        commit_message: title+body
+  - name: Merge Dependency Updates
+    conditions:
+      - base=master
+      - label=dependencies
+      - check-success=lint
+      - check-success=test (ubuntu-latest)
+      - check-success=test (macos-latest)
+    actions:
+      queue:
+        name: default
+        method: squash
+        commit_message: title+body
+  - name: Keep PRs Up To Date
+    conditions:
+      - -conflict # skip PRs with conflicts
+      - -draft # filter-out GH draft PRs
+      - -label=lgtm
+      - -label=dependencies
+    actions:
+      update:
+  - name: Delete branch after merge
+    conditions:
+      - merged
+      - base=master
+    actions:
+      delete_head_branch:
+        force: false

@@ -1,0 +1,81 @@
+on:
+  push:
+    branches:
+      - master
+
+env:
+  CI: true
+  GITHUB_CONTEXT: ${{ toJson(github) }}
+
+jobs:
+  lint:
+    if: github.event.head_commit.committer.username != 'web-flow'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+        with:
+          fetch-depth: 0
+      - name: Cache ASDF Tools
+        uses: actions/cache@v2.1.6
+        with:
+          key: ${{ runner.os }}-asdf-${{ hashFiles('task', '.tool-versions.lock', '.asdf/.plugin-versions') }}
+          restore-keys: ${{ runner.os }}-asdf-
+          path: |
+            ./.asdf/**/*
+      - name: Cache Node Modules
+        uses: actions/cache@v2.1.6
+        with:
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
+          path: |
+            ~/.npm
+            ./node_modules
+      - run: ./task lint
+
+  test:
+    if: github.event.head_commit.committer.username != 'web-flow'
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - name: Cache ASDF Tools
+        uses: actions/cache@v2.1.6
+        with:
+          key: ${{ runner.os }}-asdf-${{ hashFiles('task', '.tool-versions.lock', '.asdf/.plugin-versions') }}
+          restore-keys: ${{ runner.os }}-asdf-
+          path: |
+            ./.asdf/**/*
+      - run: ./task test
+
+  release:
+    needs: [lint, test]
+    # see: https://github.com/actions/runner/issues/491
+    if: |
+      always() &&
+      (needs.lint.result == 'success' || needs.lint.result == 'skipped') &&
+      (needs.test.result == 'success' || needs.test.result == 'skipped')
+    concurrency:
+      group: ${{ github.ref }}
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: GoogleCloudPlatform/release-please-action@v2
+        with:
+          release-type: simple
+          changelog-types: |
+            [
+              {"type":"feat","section":"Features","hidden":false},
+              {"type":"fix","section":"Bug Fixes","hidden":false},
+              {"type":"build","section":"Automation","hidden":false},
+              {"type":"ci","section":"Automation","hidden":false},
+              {"type":"docs","section":"Miscellaneous","hidden":false},
+              {"type":"perf","section":"Miscellaneous","hidden":false},
+              {"type":"refactor","section":"Miscellaneous","hidden":false},
+              {"type":"style","section":"Miscellaneous","hidden":false},
+              {"type":"test","section":"Miscellaneous","hidden":false},
+              {"type":"chore","section":"Miscellaneous","hidden":false}
+            ]
