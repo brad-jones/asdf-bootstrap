@@ -12,7 +12,6 @@ tasks:
       Eg: git clone git@github.com:brad-jones/asdf-bootstrap.git \
         && cd ./asdf-bootstrap && ./task onboard
     cmds:
-      - if [ ! -d "$PWD/.git" ]; then git init; fi
       - echo "git config pull.rebase true"
       - git config pull.rebase true
       - echo "git config core.hooksPath $PWD/.hooks"
@@ -106,4 +105,7 @@ tasks:
       Keep in mind the very fact you can actually execute this task via the
       bootstrap script is in fact a full end to end test in and of it's self.
     cmds:
+      - rm -rf ./tests/mocks
+      - git submodule update --init --recursive
       - bats ./tests
+      - rm -rf ./tests/mocks

@@ -10,9 +10,9 @@ pre-commit:
       glob: "{task,.hooks/*,*.{sh,bash,bats}}"
       run: shfmt -l -w {staged_files} && git add {staged_files}
     test:
-      glob: "{task,tests/**/*}"
+      glob: "{task,*.bats}"
       # see: https://github.com/evilmartians/lefthook/issues/228#issuecomment-924505331
-      run: echo {staged_files} >/dev/null && bats ./tests
+      run: echo {staged_files} >/dev/null && task -o interleaved test
 
 commit-msg:
   commands:
