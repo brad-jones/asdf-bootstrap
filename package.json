@@ -2,6 +2,6 @@
   "private": true,
   "dependencies": {
     "@commitlint/cli": "^13.1.0",
-    "@commitlint/config-conventional": "^13.1.0"
+    "@commitlint/config-conventional": "^14.1.0"
   }
 }
