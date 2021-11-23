@@ -16,14 +16,14 @@ jobs:
         with:
           fetch-depth: 0
       - name: Cache ASDF Tools
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         with:
           key: ${{ runner.os }}-asdf-${{ hashFiles('task', '.tool-versions.lock', '.asdf/.plugin-versions') }}
           restore-keys: ${{ runner.os }}-asdf-
           path: |
             ./.asdf/**/*
       - name: Cache Node Modules
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         with:
           key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: ${{ runner.os }}-node-
@@ -44,7 +44,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2.3.4
       - name: Cache ASDF Tools
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         with:
           key: ${{ runner.os }}-asdf-${{ hashFiles('task', '.tool-versions.lock', '.asdf/.plugin-versions') }}
           restore-keys: ${{ runner.os }}-asdf-
