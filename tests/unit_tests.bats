@@ -178,7 +178,7 @@ function get_checksum_of_dir_should_return_checksum { #@test
   echo "bar" >"${mockDir}/data/foo.txt"
   echo "alert('hello')" >"${mockDir}/data/index.js"
   echo "<?php echo 'world';" >"${mockDir}/data/index.php"
-  expected="sha512:500a5dcb0c51dbbfcc56b7ba7397facda294a5647b83c8fdf1075af3a6791038fe01be864d9e74a7265e3c1890228f5c443a21c96e93a0fa7c5de64f3802c38d"
+  expected="sha512:8cf809fcd18f6b44757fe218bfcc554f722a868727e6fbc6f68961206f1fef1d83ccbc299cd8815c9f23b58eb013b306d5313f34d41227595cbba340061d165f"
 
   # Act
   actual="$(get_checksum_of_dir "${mockDir}/data")"

@@ -57,6 +57,7 @@
     # --------------------------------------------------------------------------
     # All variables are overideable through "ASDF_LOCAL_*" equivalents.
     export ASDF_VERSION="${ASDF_LOCAL_VERSION:-"v0.8.1"}"
+    export ASDF_HASHDIR_VERSION="${ASDF_LOCAL_HASHDIR_VERSION:-"v1.0.2"}"
     export ASDF_REPO="${ASDF_LOCAL_REPO:-"https://github.com/asdf-vm/asdf.git"}"
     export ASDF_DIR="${ASDF_LOCAL_DIR:-"${ASDF_SCRIPT_DIR}/.asdf/${ASDF_VERSION}"}"
     export ASDF_DATA_DIR="${ASDF_LOCAL_DATA_DIR:-"${ASDF_DIR}"}"
@@ -364,20 +365,19 @@
   }
 
   function get_checksum_of_dir {
-    local path result
+    local path result os arch
     path="$1"
 
-    # see: https://reproducible-builds.org/docs/archives/
-    result="$(
-      tar \
-        --sort=name \
-        --mtime="1970-01-01 00:00:00" \
-        --mode=a+rwX --owner=0 --group=0 --numeric-owner \
-        --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
-        -cPf - "${path}" | sha512sum --binary
-    )"
+    if ! [ -f "${ASDF_SCRIPT_DIR}/.asdf/bin/hashdir" ]; then
+      os="$(get_os)"
+      arch="$(get_arch)"
+      mkdir -p "${ASDF_SCRIPT_DIR}/.asdf/bin"
+      curl -L "https://github.com/brad-jones/hashdir/releases/download/${ASDF_HASHDIR_VERSION}/hashdir_${os}_${arch}" -o "${ASDF_SCRIPT_DIR}/.asdf/bin/hashdir"
+      chmod +x "${ASDF_SCRIPT_DIR}/.asdf/bin/hashdir"
+    fi
 
-    echo "sha512:${result% *-}"
+    result="$("${ASDF_SCRIPT_DIR}"/.asdf/bin/hashdir -alg sha512 "${path}")"
+    echo "sha512:${result}"
   }
 
   function export_tool_versions {
