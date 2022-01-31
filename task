@@ -339,10 +339,14 @@
       get_checksum_of_dir "${ASDF_DATA_DIR}/installs/${tool}/${version}"
     )"
 
+    local os arch
+    os="$(get_os)"
+    arch="$(get_arch)"
+
     if [ -f "${ASDF_TOOL_VERSIONS_LOCKFILE}" ]; then
       local matched=0
-      while read -r lockedTool lockedVersion lockedChecksum; do
-        if [[ "${lockedTool}" == "${tool}" && "${lockedVersion}" == "${version}" ]]; then
+      while read -r lockedTool lockedVersion lockedOS lockedArch lockedChecksum; do
+        if [[ "${lockedTool}" == "${tool}" && "${lockedVersion}" == "${version}" && "${lockedOS}" == "${os}" && "${lockedArch}" == "${arch}" ]]; then
           if [ "${lockedChecksum}" == "${checksum}" ]; then
             matched=1
             break
@@ -359,7 +363,7 @@
       fi
     fi
 
-    echo "${tool} ${version} ${checksum}" >>"${ASDF_TOOL_VERSIONS_LOCKFILE}"
+    echo "${tool} ${version} ${os} ${arch} ${checksum}" >>"${ASDF_TOOL_VERSIONS_LOCKFILE}"
     echo "locked ${tool} @ ${version} to ${checksum}"
   }
 

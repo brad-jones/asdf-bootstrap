@@ -211,7 +211,7 @@ function ensure_lock_matches_should_fail_when_checksums_do_not_match { #@test
   mkdir -p "${mockDir}/installs/bar/1.2.3"
   echo "# hello world" >"${mockDir}/installs/bar/1.2.3/README.md"
   echo "execute me, yay" >"${mockDir}/installs/bar/1.2.3/bar.exe"
-  echo "bar 1.2.3 sha512:in-valid" >>"${mockDir}/.tool-versions.lock"
+  echo "bar 1.2.3 linux amd64 sha512:in-valid" >>"${mockDir}/.tool-versions.lock"
   export ASDF_DATA_DIR="${mockDir}"
   export ASDF_TOOL_VERSIONS_LOCKFILE="${mockDir}/.tool-versions.lock"
 
