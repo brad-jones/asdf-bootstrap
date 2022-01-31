@@ -306,10 +306,13 @@
 
     if ! [ -f "${ASDF_SCRIPT_DIR}/.asdf/bin/hashdir" ]; then
       log_heading "Installing hashdir tool"
+      local os arch hashDirUrl
       os="$(get_os)"
       arch="$(get_arch)"
+      hashDirUrl="https://github.com/brad-jones/hashdir/releases/download/${ASDF_HASHDIR_VERSION}/hashdir_${os}_${arch}"
       mkdir -p "${ASDF_SCRIPT_DIR}/.asdf/bin"
-      curl -L "https://github.com/brad-jones/hashdir/releases/download/${ASDF_HASHDIR_VERSION}/hashdir_${os}_${arch}" -o "${ASDF_SCRIPT_DIR}/.asdf/bin/hashdir"
+      echo "from: ${hashDirUrl}"
+      curl -L "${hashDirUrl}" -o "${ASDF_SCRIPT_DIR}/.asdf/bin/hashdir"
       chmod +x "${ASDF_SCRIPT_DIR}/.asdf/bin/hashdir"
       echo ""
     fi
