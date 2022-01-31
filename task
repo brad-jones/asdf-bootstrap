@@ -120,7 +120,6 @@
     ensure_command_exists "mkdir" "https://en.wikipedia.org/wiki/Mkdir"
     ensure_command_exists "rm" "https://en.wikipedia.org/wiki/Rm_(Unix)"
     ensure_command_exists "sed" "https://www.gnu.org/software/sed"
-    ensure_command_exists "sha512sum" "https://linux.die.net/man/1/sha512sum"
     ensure_command_exists "sort" "https://en.wikipedia.org/wiki/Sort_(Unix)"
     ensure_command_exists "tar" "https://www.gnu.org/software/tar"
     ensure_command_exists "uname" "https://en.wikipedia.org/wiki/Uname"

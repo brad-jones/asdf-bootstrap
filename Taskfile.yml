@@ -44,7 +44,7 @@ tasks:
       see: https://github.com/conventional-changelog/commitlint/issues/613#issuecomment-481419262
 
       This could also perhaps be better resolved through a simple docker image.
-      Any for now this is what we have, you can call me like:
+      Anyway for now this is what we have, you can call me like:
 
         ./task commitlint -- --opts args for commitlint
     cmds:

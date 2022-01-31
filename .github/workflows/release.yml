@@ -30,7 +30,6 @@ jobs:
           path: |
             ~/.npm
             ./node_modules
-      - run: tar --version
       - run: ./task lint
 
   test:
