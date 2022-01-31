@@ -372,6 +372,7 @@
     path="$1"
 
     if ! [ -f "${ASDF_SCRIPT_DIR}/.asdf/bin/hashdir" ]; then
+      log_heading "Installing hashdir tool"
       os="$(get_os)"
       arch="$(get_arch)"
       mkdir -p "${ASDF_SCRIPT_DIR}/.asdf/bin"
