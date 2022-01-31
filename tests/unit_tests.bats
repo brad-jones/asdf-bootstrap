@@ -13,7 +13,9 @@ function arrange {
   mkdir -p "${tmpDir}"
   if [ ! -f "${tmpDir}/${scriptName}" ]; then
     cp ./task "${tmpDir}/${scriptName}"
-    sed -i -e 's/main "$@"//g' -e 's/exit $?//g' "${tmpDir}/${scriptName}"
+    sed -e 's/main "$@"//g' -e 's/exit $?//g' "${tmpDir}/${scriptName}" >"${tmpDir}/${scriptName}.replaced"
+    rm -f "${tmpDir}/${scriptName}"
+    mv "${tmpDir}/${scriptName}.replaced" "${tmpDir}/${scriptName}"
   fi
   # shellcheck disable=SC1090 disable=SC1091
   source "${tmpDir}/${scriptName}"
