@@ -303,6 +303,16 @@
   function install_asdf_tools {
     local toolVersionsFile="$1"
     local dir="$2"
+
+    if ! [ -f "${ASDF_SCRIPT_DIR}/.asdf/bin/hashdir" ]; then
+      log_heading "Installing hashdir tool"
+      os="$(get_os)"
+      arch="$(get_arch)"
+      mkdir -p "${ASDF_SCRIPT_DIR}/.asdf/bin"
+      curl -L "https://github.com/brad-jones/hashdir/releases/download/${ASDF_HASHDIR_VERSION}/hashdir_${os}_${arch}" -o "${ASDF_SCRIPT_DIR}/.asdf/bin/hashdir"
+      chmod +x "${ASDF_SCRIPT_DIR}/.asdf/bin/hashdir"
+    fi
+
     echo -e "$(cat "${toolVersionsFile}")\n" | while read -r tool version; do
       if [ "${tool}" != "" ]; then
         if [ ! -d "${dir}/installs/${tool}/${version}" ]; then
@@ -370,15 +380,6 @@
   function get_checksum_of_dir {
     local path result os arch
     path="$1"
-
-    if ! [ -f "${ASDF_SCRIPT_DIR}/.asdf/bin/hashdir" ]; then
-      log_heading "Installing hashdir tool"
-      os="$(get_os)"
-      arch="$(get_arch)"
-      mkdir -p "${ASDF_SCRIPT_DIR}/.asdf/bin"
-      curl -L "https://github.com/brad-jones/hashdir/releases/download/${ASDF_HASHDIR_VERSION}/hashdir_${os}_${arch}" -o "${ASDF_SCRIPT_DIR}/.asdf/bin/hashdir"
-      chmod +x "${ASDF_SCRIPT_DIR}/.asdf/bin/hashdir"
-    fi
 
     result="$("${ASDF_SCRIPT_DIR}"/.asdf/bin/hashdir -alg sha512 "${path}")"
     echo "sha512:${result}"
