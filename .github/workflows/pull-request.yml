@@ -11,5 +11,7 @@ env:
   GITHUB_CONTEXT: ${{ toJson(github) }}
 
 jobs:
-  checks:
-    uses: ./.github/workflows/checks.yml
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Foo Bar"
