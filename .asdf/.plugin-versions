@@ -1,7 +1,7 @@
 bats https://github.com/timgluz/asdf-bats.git 2d9cb0dd55e905bceea0a2c0f44a0bddfd593509
 jq https://github.com/azmcode/asdf-jq.git 844d7123a80bccdfd8d9cf5bd64d0d36d71db382
 lefthook https://github.com/brad-jones/asdf-lefthook.git 53a498b16f2ad753a944c366073cee92fdac4802
-nodejs https://github.com/asdf-vm/asdf-nodejs.git 95a2091f7b64497c002dc709b267f5d03f302498
+nodejs https://github.com/asdf-vm/asdf-nodejs.git ed343553166813b1ca37a187e44779659cd33ca2
 shellcheck https://github.com/luizm/asdf-shellcheck.git 2c72b1f6a4012e91900a6e7438578abce8ab2013
 shfmt https://github.com/luizm/asdf-shfmt.git f8932529429eefe30af8efb23487d99d5c509278
 task https://github.com/particledecay/asdf-task.git c8c826a014c522f6ee38ec5fcffa10d7277e7930

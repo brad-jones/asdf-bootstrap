@@ -56,7 +56,7 @@
     # >>> EDITME: Script Config
     # --------------------------------------------------------------------------
     # All variables are overideable through "ASDF_LOCAL_*" equivalents.
-    export ASDF_VERSION="${ASDF_LOCAL_VERSION:-"v0.8.1"}"
+    export ASDF_VERSION="${ASDF_LOCAL_VERSION:-"v0.9.0"}"
     export ASDF_HASHDIR_VERSION="${ASDF_LOCAL_HASHDIR_VERSION:-"v1.0.2"}"
     export ASDF_REPO="${ASDF_LOCAL_REPO:-"https://github.com/asdf-vm/asdf.git"}"
     export ASDF_DIR="${ASDF_LOCAL_DIR:-"${ASDF_SCRIPT_DIR}/.asdf/${ASDF_VERSION}"}"
