@@ -6,7 +6,6 @@ env:
 
 jobs:
   lint:
-    if: github.event.head_commit.committer.username != 'web-flow'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.4.0
@@ -30,7 +29,6 @@ jobs:
       - run: ./task lint
 
   test:
-    if: github.event.head_commit.committer.username != 'web-flow'
     strategy:
       matrix:
         os:

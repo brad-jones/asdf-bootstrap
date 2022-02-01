@@ -9,14 +9,13 @@ env:
 
 jobs:
   checks:
+    if: github.event.head_commit.committer.username != 'web-flow'
     uses: ./.github/workflows/checks.yml
 
   release:
     needs: [checks]
     # see: https://github.com/actions/runner/issues/491
-    if: |
-      always() &&
-      (needs.checks.result == 'success' || needs.checks.result == 'skipped')
+    if: always() && (needs.checks.result == 'success' || needs.checks.result == 'skipped')
     concurrency:
       group: ${{ github.ref }}
       cancel-in-progress: false
