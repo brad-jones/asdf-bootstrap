@@ -1,7 +1,4 @@
-on:
-  push:
-    branches:
-      - master
+on: { push: { branches: [master] } }
 
 env:
   CI: true
@@ -21,8 +18,15 @@ jobs:
       cancel-in-progress: false
     runs-on: ubuntu-latest
     steps:
+      - id: generate_token
+        uses: tibdex/github-app-token@v1.5.1
+        with:
+          app_id: ${{ secrets.BOT_ID }}
+          private_key: ${{ secrets.BOT_KEY }}
+
       - uses: GoogleCloudPlatform/release-please-action@v3.1
         with:
+          token: ${{ steps.generate_token.outputs.token }}
           release-type: simple
           changelog-types: |
             [
