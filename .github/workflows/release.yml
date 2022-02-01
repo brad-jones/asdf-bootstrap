@@ -16,8 +16,7 @@ jobs:
     # see: https://github.com/actions/runner/issues/491
     if: |
       always() &&
-      (needs.lint.result == 'success' || needs.lint.result == 'skipped') &&
-      (needs.test.result == 'success' || needs.test.result == 'skipped')
+      (needs.checks.result == 'success' || needs.checks.result == 'skipped')
     concurrency:
       group: ${{ github.ref }}
       cancel-in-progress: false
