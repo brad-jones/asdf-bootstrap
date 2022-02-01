@@ -1,0 +1,45 @@
+on: { workflow_call: {} }
+
+jobs:
+  lint:
+    if: github.event.head_commit.committer.username != 'web-flow'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.4.0
+        with:
+          fetch-depth: 0
+      - name: Cache ASDF Tools
+        uses: actions/cache@v2.1.7
+        with:
+          key: ${{ runner.os }}-asdf-${{ hashFiles('task', '.tool-versions.lock', '.asdf/.plugin-versions') }}
+          restore-keys: ${{ runner.os }}-asdf-
+          path: |
+            ./.asdf/**/*
+      - name: Cache Node Modules
+        uses: actions/cache@v2.1.7
+        with:
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
+          path: |
+            ~/.npm
+            ./node_modules
+      - run: ./task lint
+
+  test:
+    if: github.event.head_commit.committer.username != 'web-flow'
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2.4.0
+      - name: Cache ASDF Tools
+        uses: actions/cache@v2.1.7
+        with:
+          key: ${{ runner.os }}-asdf-${{ hashFiles('task', '.tool-versions.lock', '.asdf/.plugin-versions') }}
+          restore-keys: ${{ runner.os }}-asdf-
+          path: |
+            ./.asdf/**/*
+      - run: ./task test
