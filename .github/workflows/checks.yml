@@ -1,5 +1,9 @@
 on: { workflow_call: {} }
 
+env:
+  CI: true
+  GITHUB_CONTEXT: ${{ toJson(github) }}
+
 jobs:
   lint:
     if: github.event.head_commit.committer.username != 'web-flow'
