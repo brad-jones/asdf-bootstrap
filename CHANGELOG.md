@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.0.2](https://github.com/brad-jones/asdf-bootstrap/compare/v1.0.1...v1.0.2) (2022-02-02)
+
+
+### Bug Fixes
+
+* **release:** ok step ran but forgot to checkout repo for local action ([cbc4a5a](https://github.com/brad-jones/asdf-bootstrap/commit/cbc4a5a8ee2d2444765abcebb6f1cccec5a795ca))
+
 ### [1.0.1](https://github.com/brad-jones/asdf-bootstrap/compare/v1.0.0...v1.0.1) (2022-02-02)
 
 
