@@ -15,10 +15,11 @@ jobs:
       - name: Cache ASDF Tools
         uses: actions/cache@v2.1.7
         with:
-          key: ${{ runner.os }}-asdf-${{ hashFiles('task', '.tool-versions', '.tool-versions.lock', '.asdf/.plugin-versions') }}
-          restore-keys: ${{ runner.os }}-asdf-
+          key: ${{ runner.os }}-asdf2-${{ hashFiles('task', '.tool-versions', '.tool-versions.lock', '.asdf/.plugin-versions') }}
+          restore-keys: ${{ runner.os }}-asdf2-
           path: |
-            ./.asdf/**/*
+            ./.asdf/bin/**/*
+            ./.asdf/v0.9.0/**/*
       - name: Cache Node Modules
         uses: actions/cache@v2.1.7
         with:
@@ -41,8 +42,9 @@ jobs:
       - name: Cache ASDF Tools
         uses: actions/cache@v2.1.7
         with:
-          key: ${{ runner.os }}-asdf-${{ hashFiles('task', '.tool-versions', '.tool-versions.lock', '.asdf/.plugin-versions') }}
-          restore-keys: ${{ runner.os }}-asdf-
+          key: ${{ runner.os }}-asdf2-${{ hashFiles('task', '.tool-versions', '.tool-versions.lock', '.asdf/.plugin-versions') }}
+          restore-keys: ${{ runner.os }}-asdf2-
           path: |
-            ./.asdf/**/*
+            ./.asdf/bin/**/*
+            ./.asdf/v0.9.0/**/*
       - run: ./task test
