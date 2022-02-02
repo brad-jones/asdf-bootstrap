@@ -45,7 +45,7 @@ jobs:
             ]
 
       - if: ${{ steps.release_please.outputs.release_created }}
-        run: echo "UPLOAD - ${{ steps.release_please.outputs.upload_url }}"
+        run: echo ${{ toJson(steps.release_please.outputs) }}
 
       - if: ${{ steps.release_please.outputs.release_created }}
         uses: actions/checkout@v2.4.0
@@ -60,7 +60,7 @@ jobs:
             ./.asdf/v0.9.0/**/*
 
       - if: ${{ steps.release_please.outputs.release_created }}
-        run: ./task build VERSION=${{ steps.release_please.outputs.major }}".${{ steps.release_please.outputs.minor }}.${{ steps.release_please.outputs.patch }}
+        run: ./task build VERSION=${{ steps.release_please.outputs.major }}.${{ steps.release_please.outputs.minor }}.${{ steps.release_please.outputs.patch }}
 
       - if: ${{ steps.release_please.outputs.release_created }}
         uses: shogo82148/actions-upload-release-asset@v1.5.0
