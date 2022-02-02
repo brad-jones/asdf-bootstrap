@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.0.4](https://github.com/brad-jones/asdf-bootstrap/compare/v1.0.3...v1.0.4) (2022-02-02)
+
+
+### Bug Fixes
+
+* **release:** update release please repo ([190ca15](https://github.com/brad-jones/asdf-bootstrap/commit/190ca150fc773d57f15f0ac13474ccec8fdb6427))
+
 ### [1.0.3](https://github.com/brad-jones/asdf-bootstrap/compare/v1.0.2...v1.0.3) (2022-02-02)
 
 
