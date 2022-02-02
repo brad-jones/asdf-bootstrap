@@ -32,8 +32,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v2.4.0
-
     - uses: actions/cache@v2.1.7
       with:
         key: ${{ runner.os }}-asdf2-${{ hashFiles('task', '.tool-versions', '.tool-versions.lock', '.asdf/.plugin-versions') }}
