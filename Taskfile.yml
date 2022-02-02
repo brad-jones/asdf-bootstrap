@@ -46,13 +46,13 @@ tasks:
 
         ./task commitlint -- --opts args for commitlint
     cmds:
-      - if [ ! -d "$PWD/node_modules" ]; then npm ci; fi
+      - if [ ! -f "$PWD/node_modules/.bin/commitlint" ]; then npm ci; fi
       - ./node_modules/.bin/commitlint {{.CLI_ARGS}}
 
   rp:
     desc: Entrypoint task for the release please tool
     cmds:
-      - if [ ! -d "$PWD/node_modules" ]; then npm ci; fi
+      - if [ ! -f "$PWD/node_modules/.bin/release-please" ]; then npm ci; fi
       - ./node_modules/.bin/release-please {{.CLI_ARGS}}
 
   release:
