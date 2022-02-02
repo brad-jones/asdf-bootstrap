@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.0.0 (2022-02-02)
+
+
+### Features
+
+* initial commit ([d271397](https://github.com/brad-jones/asdf-bootstrap/commit/d2713975d1d3a97e86cac51d2789b383b7c76972))
+
+
+### Bug Fixes
+
+* **get_checksum_of_dir:** generate the same hash for the same content ([f7576f2](https://github.com/brad-jones/asdf-bootstrap/commit/f7576f20b44a36a87a96c2f00db92e24b8ea98f7))
+* make use of our new hashdir cli tool ([b37a9de](https://github.com/brad-jones/asdf-bootstrap/commit/b37a9dedfe1865f74d67a769fb9a0afd2a130f71))
+* **release:** lets try this ([98ee11b](https://github.com/brad-jones/asdf-bootstrap/commit/98ee11bf8def114a433cdad8b7b9c1850a6623b1))
+* **release:** never ran ([a213fab](https://github.com/brad-jones/asdf-bootstrap/commit/a213fab9666ff4fefa68fa5552d8134207ee665e))
+* **release:** ok lets try this ([6c1ede6](https://github.com/brad-jones/asdf-bootstrap/commit/6c1ede65e89a7b226e6791b3f75b43853a43985d))
+* **release:** ok step ran but forgot to checkout repo for local action ([cbc4a5a](https://github.com/brad-jones/asdf-bootstrap/commit/cbc4a5a8ee2d2444765abcebb6f1cccec5a795ca))
+* **release:** try using release please directly ([aeeee11](https://github.com/brad-jones/asdf-bootstrap/commit/aeeee11e67fa9ce9e3ab394b4ff82f94d0bc7875))
+* **release:** update release please repo ([190ca15](https://github.com/brad-jones/asdf-bootstrap/commit/190ca150fc773d57f15f0ac13474ccec8fdb6427))
+* **release:** version number refs were incorrect ([127c6da](https://github.com/brad-jones/asdf-bootstrap/commit/127c6da679b3bbe52e5e153ca04c97352c130411))
+
 ### [1.0.6](https://github.com/brad-jones/asdf-bootstrap/compare/v1.0.5...v1.0.6) (2022-02-02)
 
 
