@@ -24,7 +24,7 @@ jobs:
 
       - uses: actions/cache@v2.1.7
         with:
-          key: ${{ runner.os }}-asdf-${{ hashFiles('task', '.tool-versions.lock', '.asdf/.plugin-versions') }}
+          key: ${{ runner.os }}-asdf-${{ hashFiles('task', '.tool-versions', '.tool-versions.lock', '.asdf/.plugin-versions') }}
           restore-keys: ${{ runner.os }}-asdf-
           path: |
             ./.asdf/**/*

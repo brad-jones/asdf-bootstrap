@@ -12,21 +12,21 @@ jobs:
       - uses: actions/checkout@v2.4.0
         with:
           fetch-depth: 0
-      #- name: Cache ASDF Tools
-      #  uses: actions/cache@v2.1.7
-      #  with:
-      #    key: ${{ runner.os }}-asdf-${{ hashFiles('task', '.tool-versions.lock', '.asdf/.plugin-versions') }}
-      #    restore-keys: ${{ runner.os }}-asdf-
-      #    path: |
-      #      ./.asdf/**/*
-      #- name: Cache Node Modules
-      #  uses: actions/cache@v2.1.7
-      #  with:
-      #    key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
-      #    restore-keys: ${{ runner.os }}-node-
-      #    path: |
-      #      ~/.npm
-      #      ./node_modules
+      - name: Cache ASDF Tools
+        uses: actions/cache@v2.1.7
+        with:
+          key: ${{ runner.os }}-asdf-${{ hashFiles('task', '.tool-versions', '.tool-versions.lock', '.asdf/.plugin-versions') }}
+          restore-keys: ${{ runner.os }}-asdf-
+          path: |
+            ./.asdf/**/*
+      - name: Cache Node Modules
+        uses: actions/cache@v2.1.7
+        with:
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
+          path: |
+            ~/.npm
+            ./node_modules
       - run: ./task lint
 
   test:
@@ -41,7 +41,7 @@ jobs:
       - name: Cache ASDF Tools
         uses: actions/cache@v2.1.7
         with:
-          key: ${{ runner.os }}-asdf-${{ hashFiles('task', '.tool-versions.lock', '.asdf/.plugin-versions') }}
+          key: ${{ runner.os }}-asdf-${{ hashFiles('task', '.tool-versions', '.tool-versions.lock', '.asdf/.plugin-versions') }}
           restore-keys: ${{ runner.os }}-asdf-
           path: |
             ./.asdf/**/*
