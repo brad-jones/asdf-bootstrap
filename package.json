@@ -4,5 +4,6 @@
     "@commitlint/cli": "^16.1.0",
     "@commitlint/config-conventional": "^16.0.0",
     "release-please": "^13.4.6"
-  }
+  },
+  "version": "1.0.7"
 }

@@ -1,5 +1,14 @@
 # Changelog
 
+### [1.0.7](https://github.com/brad-jones/asdf-bootstrap/compare/v1.0.6...v1.0.7) (2022-02-02)
+
+
+### Bug Fixes
+
+* **release:** bust cache ([df55f4f](https://github.com/brad-jones/asdf-bootstrap/commit/df55f4f8619fa823f1c20a52795c825c220cd037))
+* **release:** try using release please directly ([aeeee11](https://github.com/brad-jones/asdf-bootstrap/commit/aeeee11e67fa9ce9e3ab394b4ff82f94d0bc7875))
+* **release:** what happens now ([5aa0698](https://github.com/brad-jones/asdf-bootstrap/commit/5aa0698deba71d9dee5baa054acdb85fc19cd1a5))
+
 ### [1.0.6](https://github.com/brad-jones/asdf-bootstrap/compare/v1.0.5...v1.0.6) (2022-02-02)
 
 
