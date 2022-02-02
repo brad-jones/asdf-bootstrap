@@ -11,6 +11,7 @@ tasks:
       Eg: git clone git@github.com:brad-jones/asdf-bootstrap.git \
         && cd ./asdf-bootstrap && ./task onboard
     cmds:
+      - npm install
       - git config core.eol "lf"
       - git config pull.rebase "true"
       - git config core.autocrlf "false"
@@ -47,6 +48,17 @@ tasks:
     cmds:
       - if [ ! -d "$PWD/node_modules" ]; then npm ci; fi
       - ./node_modules/.bin/commitlint {{.CLI_ARGS}}
+
+  rp:
+    desc: Entrypoint task for the release please tool
+    cmds:
+      - if [ ! -d "$PWD/node_modules" ]; then npm ci; fi
+      - ./node_modules/.bin/release-please {{.CLI_ARGS}}
+
+  release:
+    cmds:
+      - task rp -- github-release --token=$GITHUB_TOKEN --repo-url=brad-jones/asdf-bootstrap
+      - task rp -- release-pr --token=$GITHUB_TOKEN --repo-url=brad-jones/asdf-bootstrap
 
   lint-commit-msg:
     desc: This is what the github action pipeline runs to enforce the commit convention

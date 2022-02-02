@@ -25,33 +25,9 @@ jobs:
           app_id: ${{ secrets.BOT_ID }}
           private_key: ${{ secrets.BOT_KEY }}
 
-      - id: release_please
-        uses: google-github-actions/release-please-action@v3
-        with:
-          token: ${{ steps.generate_token.outputs.token }}
-          release-type: simple
-          changelog-types: |
-            [
-              {"type":"feat","section":"Features","hidden":false},
-              {"type":"fix","section":"Bug Fixes","hidden":false},
-              {"type":"build","section":"Automation","hidden":false},
-              {"type":"ci","section":"Automation","hidden":false},
-              {"type":"docs","section":"Miscellaneous","hidden":false},
-              {"type":"perf","section":"Miscellaneous","hidden":false},
-              {"type":"refactor","section":"Miscellaneous","hidden":false},
-              {"type":"style","section":"Miscellaneous","hidden":false},
-              {"type":"test","section":"Miscellaneous","hidden":false},
-              {"type":"chore","section":"Miscellaneous","hidden":false}
-            ]
+      - uses: actions/checkout@v2.4.0
 
-      - if: ${{ steps.release_please.outputs.release_created }}
-        run: echo ${{ toJson(steps.release_please.outputs) }}
-
-      - if: ${{ steps.release_please.outputs.release_created }}
-        uses: actions/checkout@v2.4.0
-
-      - if: ${{ steps.release_please.outputs.release_created }}
-        uses: actions/cache@v2.1.7
+      - uses: actions/cache@v2.1.7
         with:
           key: ${{ runner.os }}-asdf2-${{ hashFiles('task', '.tool-versions', '.tool-versions.lock', '.asdf/.plugin-versions') }}
           restore-keys: ${{ runner.os }}-asdf2-
@@ -59,12 +35,51 @@ jobs:
             ./.asdf/bin/**/*
             ./.asdf/v0.9.0/**/*
 
-      - if: ${{ steps.release_please.outputs.release_created }}
-        run: ./task build VERSION=${{ steps.release_please.outputs.major }}.${{ steps.release_please.outputs.minor }}.${{ steps.release_please.outputs.patch }}
+      - run: ./task release
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
 
-      - if: ${{ steps.release_please.outputs.release_created }}
-        uses: shogo82148/actions-upload-release-asset@v1.5.0
-        with:
-          github_token: ${{ steps.generate_token.outputs.token }}
-          upload_url: ${{ steps.release_please.outputs.upload_url }}
-          asset_path: ./assets/*
+      #- id: release_please
+      #  uses: google-github-actions/release-please-action@v3
+      #  with:
+      #    token: ${{ steps.generate_token.outputs.token }}
+      #    release-type: simple
+      #    changelog-types: |
+      #      [
+      #        {"type":"feat","section":"Features","hidden":false},
+      #        {"type":"fix","section":"Bug Fixes","hidden":false},
+      #        {"type":"build","section":"Automation","hidden":false},
+      #        {"type":"ci","section":"Automation","hidden":false},
+      #        {"type":"docs","section":"Miscellaneous","hidden":false},
+      #        {"type":"perf","section":"Miscellaneous","hidden":false},
+      #        {"type":"refactor","section":"Miscellaneous","hidden":false},
+      #        {"type":"style","section":"Miscellaneous","hidden":false},
+      #        {"type":"test","section":"Miscellaneous","hidden":false},
+      #        {"type":"chore","section":"Miscellaneous","hidden":false}
+      #      ]
+#
+#- if: ${{ steps.release_please.outputs.release_created }}
+#  run: echo ${{ toJson(steps.release_please.outputs) }}
+#
+#- if: ${{ steps.release_please.outputs.release_created }}
+#  uses: actions/checkout@v2.4.0
+#
+#- if: ${{ steps.release_please.outputs.release_created }}
+#  uses: actions/cache@v2.1.7
+#  with:
+#    key: ${{ runner.os }}-asdf2-${{ hashFiles('task', '.tool-versions', '.tool-versions.lock', '.asdf/.plugin-versions') }}
+#    restore-keys: ${{ runner.os }}-asdf2-
+#    path: |
+#      ./.asdf/bin/**/*
+#      ./.asdf/v0.9.0/**/*
+#
+#- if: ${{ steps.release_please.outputs.release_created }}
+#  run: ./task build VERSION=${{ steps.release_please.outputs.major }}.${{ steps.release_please.outputs.minor }}.${{ steps.release_please.outputs.patch }}
+#
+#- if: ${{ steps.release_please.outputs.release_created }}
+#  uses: shogo82148/actions-upload-release-asset@v1.5.0
+#  with:
+#    github_token: ${{ steps.generate_token.outputs.token }}
+#    upload_url: ${{ steps.release_please.outputs.upload_url }}
+#    asset_path: ./assets/*
+#
