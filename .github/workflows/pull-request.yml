@@ -12,4 +12,5 @@ env:
 
 jobs:
   checks:
-    uses: ./.github/workflows/checks.yml
+    # see: https://github.com/github/feedback/discussions/10679
+    uses: github.com/brad-jones/asdf-bootstrap/.github/workflows/checks.yml@master

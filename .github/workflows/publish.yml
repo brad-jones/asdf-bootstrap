@@ -1,0 +1,37 @@
+on:
+  workflow_call:
+    inputs:
+      token: { type: string, required: true }
+      upload_url: { type: string, required: true }
+      html_url: { type: string, required: true }
+      tag_name: { type: string, required: true }
+      major: { type: string, required: true }
+      minor: { type: string, required: true }
+      patch: { type: string, required: true }
+      sha: { type: string, required: true }
+      pr: { type: string, required: true }
+
+env:
+  CI: true
+  GITHUB_CONTEXT: ${{ toJson(github) }}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.4.0
+
+      - uses: actions/cache@v2.1.7
+        with:
+          key: ${{ runner.os }}-asdf-${{ hashFiles('task', '.tool-versions.lock', '.asdf/.plugin-versions') }}
+          restore-keys: ${{ runner.os }}-asdf-
+          path: |
+            ./.asdf/**/*
+
+      - run: ./task build VERSION=${{ inputs.major }}.${{ inputs.minor }}.${{ inputs.patch }}
+
+      - uses: shogo82148/actions-upload-release-asset@v1.5.0
+        with:
+          github_token: ${{ inputs.token }}
+          upload_url: ${{ inputs.upload_url }}
+          asset_path: ./assets/*

@@ -6,6 +6,9 @@
 # Ignore generated artifacts used for testing
 tests/mocks
 
+# Ignore assets folder used to prepare github release assets
+assets/
+
 # Created by https://www.toptal.com/developers/gitignore/api/linux,macos,dotenv,windows,visualstudiocode,node
 # Edit at https://www.toptal.com/developers/gitignore?templates=linux,macos,dotenv,windows,visualstudiocode,node
 

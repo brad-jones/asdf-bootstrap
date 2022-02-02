@@ -3,15 +3,17 @@
 pre-commit:
   parallel: true
   commands:
-    lint:
+    # Setup all our linters to execute only when matching files have been staged
+    shfmt:
+      glob: "{task,.hooks/*,*.{sh,bash,bats}}"
+      run: shfmt -s -d {staged_files}
+    shellcheck:
       glob: "{task,.hooks/*,*.{sh,bash,bats}}"
       run: shellcheck {staged_files}
-    fmt:
-      glob: "{task,.hooks/*,*.{sh,bash,bats}}"
-      run: |
-        git stash -q --keep-index &&
-        shfmt -l -w {staged_files} &&
-        git add -u && git stash pop -q
+
+    # Executes our test suite only when something changed that would make a
+    # material difference to the actual test results. ie: No point running
+    # tests when a markdown file is updated.
     test:
       glob: "{task,*.bats}"
       # see: https://github.com/evilmartians/lefthook/issues/228#issuecomment-924505331
