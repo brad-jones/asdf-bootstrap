@@ -59,6 +59,7 @@ tasks:
     cmds:
       - task rp -- github-release --token=$GITHUB_TOKEN --repo-url=brad-jones/asdf-bootstrap
       - task rp -- release-pr --token=$GITHUB_TOKEN --repo-url=brad-jones/asdf-bootstrap
+      # // https://github.com/googleapis/release-please/blob/2c3fd82eb8fe07c135dbb2560e8b2b04e8aaf506/src/manifest.ts#L1075-L1097
 
   lint-commit-msg:
     desc: This is what the github action pipeline runs to enforce the commit convention
