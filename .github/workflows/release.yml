@@ -43,29 +43,16 @@ jobs:
               {"type":"test","section":"Miscellaneous","hidden":false},
               {"type":"chore","section":"Miscellaneous","hidden":false}
             ]
-    outputs:
-      token: ${{ steps.generate_token.outputs.token }}
-      release_created: ${{ steps.release_please.outputs.release_created }}
-      upload_url: ${{ steps.release_please.outputs.upload_url }}
-      html_url: ${{ steps.release_please.outputs.html_url }}
-      tag_name: ${{ steps.release_please.outputs.tag_name }}
-      major: ${{ steps.release_please.outputs.major }}
-      minor: ${{ steps.release_please.outputs.minor }}
-      patch: ${{ steps.release_please.outputs.patch }}
-      sha: ${{ steps.release_please.outputs.sha }}
-      pr: ${{ steps.release_please.outputs.pr }}
 
-  publish:
-    needs: [release]
-    if: needs.release.outputs.release_created
-    uses: ./.github/workflows/publish.yml
-    with:
-      token: ${{ needs.release.outputs.token }}
-      upload_url: ${{ needs.release.outputs.upload_url }}
-      html_url: ${{ needs.release.outputs.html_url }}
-      tag_name: ${{ needs.release.outputs.tag_name }}
-      major: ${{ needs.release.outputs.major }}
-      minor: ${{ needs.release.outputs.minor }}
-      patch: ${{ needs.release.outputs.patch }}
-      sha: ${{ needs.release.outputs.sha }}
-      pr: ${{ needs.release.outputs.pr }}
+      - if: needs.release.outputs.release_created
+        uses: ./.github/actions/publish
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+          upload_url: ${{ steps.release_please.outputs.upload_url }}
+          html_url: ${{ steps.release_please.outputs.html_url }}
+          tag_name: ${{ steps.release_please.outputs.tag_name }}
+          major: ${{ steps.release_please.outputs.major }}
+          minor: ${{ steps.release_please.outputs.minor }}
+          patch: ${{ steps.release_please.outputs.patch }}
+          sha: ${{ steps.release_please.outputs.sha }}
+          pr: ${{ steps.release_please.outputs.pr }}
