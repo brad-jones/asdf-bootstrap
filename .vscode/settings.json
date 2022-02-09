@@ -1,0 +1,21 @@
+{
+  "editor.codeLens": false,
+  "editor.rulers": [
+    80,
+    120
+  ],
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.renderWhitespace": "boundary",
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "files.associations": {
+    "*.gitmessagetpl": "git-commit",
+    "*.bats": "shellscript"
+  },
+  "shellformat.useEditorConfig": true,
+  "deno.enable": true,
+  "deno.lint": true,
+  "deno.unstable": true
+}

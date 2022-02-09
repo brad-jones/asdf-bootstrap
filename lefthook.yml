@@ -1,0 +1,25 @@
+# spec: https://github.com/evilmartians/lefthook/blob/master/docs/full_guide.md
+
+pre-commit:
+  parallel: true
+  commands:
+    # Setup all our linters to execute only when matching files have been staged
+    shfmt:
+      glob: "{task,.hooks/*,*.{sh,bash,bats}}"
+      run: shfmt -s -d {staged_files}
+    shellcheck:
+      glob: "{task,.hooks/*,*.{sh,bash,bats}}"
+      run: shellcheck {staged_files}
+
+    # Executes our test suite only when something changed that would make a
+    # material difference to the actual test results. ie: No point running
+    # tests when a markdown file is updated.
+    test:
+      glob: "{task,*.bats}"
+      # see: https://github.com/evilmartians/lefthook/issues/228#issuecomment-924505331
+      run: echo {staged_files} >/dev/null && task -o interleaved test
+
+commit-msg:
+  commands:
+    commitlint:
+      run: task commitlint -o interleaved -- -e -V

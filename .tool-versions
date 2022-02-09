@@ -1,0 +1,8 @@
+bats v1.5.0
+jq 1.6
+lefthook 0.7.7
+nodejs 16.13.2
+shellcheck 0.8.0
+shfmt 3.4.2
+task 3.10.0
+gh 2.5.0

@@ -1,0 +1,70 @@
+# These jobs represent a set of checks that we wun against a Pull Request
+# as well as any commits pushed directly to the master/main branch.
+on: { workflow_call: {} }
+
+env:
+  # Give a clear & simple indication to tools & scripts
+  # that we are running inside a CI/CD environment
+  CI: true
+
+  # Most ASDF installers make use of this environment variable to make
+  # authenticated requests to the Github REST APIs thus avoiding rate
+  # limits for unauthenticated callers.
+  GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # We expose the entire context as an environment variable here
+  # which we then parse with jq inside our task runner.
+  GITHUB_CONTEXT: ${{ toJson(github) }}
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2.4.0
+        with:
+          fetch-depth: 0 # fetch everything so we can lint all commits
+
+      - name: Cache ASDF Tools
+        uses: actions/cache@v2.1.7
+        with:
+          key: ${{ runner.os }}-asdf2-${{ hashFiles('task', '.tool-versions', '.tool-versions.lock', '.asdf/.plugin-versions') }}
+          restore-keys: ${{ runner.os }}-asdf2-
+          path: |
+            ./.asdf/bin/**/*
+            ./.asdf/v0.9.0/**/*
+
+      - name: Cache Node Modules
+        uses: actions/cache@v2.1.7
+        with:
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
+          path: |
+            ~/.npm
+            ./node_modules
+
+      - name: Execute Linters
+        run: ./task lint
+
+  test:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2.4.0
+
+      - name: Cache ASDF Tools
+        uses: actions/cache@v2.1.7
+        with:
+          key: ${{ runner.os }}-asdf2-${{ hashFiles('task', '.tool-versions', '.tool-versions.lock', '.asdf/.plugin-versions') }}
+          restore-keys: ${{ runner.os }}-asdf2-
+          path: |
+            ./.asdf/bin/**/*
+            ./.asdf/v0.9.0/**/*
+
+      - name: Execute Tests
+        run: ./task test

@@ -1,0 +1,119 @@
+version: "3"
+
+dotenv: [".env"]
+output: prefixed
+run: when_changed
+
+tasks:
+  onboard:
+    desc: Execute this immediately after cloning to configure your environment.
+    summary: |
+      Eg: git clone git@github.com:brad-jones/asdf-bootstrap.git \
+        && cd ./asdf-bootstrap && ./task onboard
+    cmds:
+      - npm install
+      - git config core.eol "lf"
+      - git config pull.rebase "true"
+      - git config core.autocrlf "false"
+      - git config push.default "simple"
+      - git config core.hooksPath $PWD/.hooks
+      - git config commit.template $PWD/.gitmessagetpl
+
+  lint:
+    desc: Lints all the things, this is what the pipeline executes.
+    deps:
+      - lint-shfmt
+      - lint-shellcheck
+      - lint-commit-msg
+      - lint-pr-commit-msg
+
+  lint-shfmt:
+    cmds:
+      - shfmt -d ./task
+
+  lint-shellcheck:
+    cmds:
+      - shellcheck -s bash ./task
+
+  commitlint:
+    desc: Entrypoint task for the commitlint tool
+    summary: |
+      This is needed because commitlint & npx do not work well together.
+      see: https://github.com/conventional-changelog/commitlint/issues/613#issuecomment-481419262
+
+      This could also perhaps be better resolved through a simple docker image.
+      Anyway for now this is what we have, you can call me like:
+
+        ./task commitlint -- --opts args for commitlint
+    cmds:
+      - if [ ! -f "$PWD/node_modules/.bin/commitlint" ]; then npm ci; fi
+      - ./node_modules/.bin/commitlint {{.CLI_ARGS}}
+
+  lint-commit-msg:
+    desc: This is what the github action pipeline runs to enforce the commit convention
+    vars:
+      GIT_EMPTY_SHA: "0000000000000000000000000000000000000000"
+      BEFORE:
+        sh: echo $GITHUB_CONTEXT | jq -r '.event.before'
+      FORCED:
+        sh: echo $GITHUB_CONTEXT | jq -r '.event.forced'
+    cmds:
+      - |
+        if [ "${GITHUB_EVENT_NAME:-}" == "push" ]; then
+          from="{{.BEFORE}}"
+
+          if [ "{{.FORCED}}" == "true" ]; then
+            echo "Commit was forced, checking only the latest commit from push instead of a range of commit messages."
+            echo "When a commit is forced, the "before" field from the push event may point to a commit that doesn't exist."
+            from="null"
+          fi
+
+          if [ "${from}" == "{{.GIT_EMPTY_SHA}}" ]; then
+            echo "Checking only the latest commit from push instead of a range of commit messages, as this is the very first commit."
+            from="null"
+          fi
+
+          if [ "${from}" == "null" ]; then
+            git log -1 --pretty='%B' | task commitlint -- -V
+          else
+            echo "FROM=${from}"
+            echo "TO=${GITHUB_SHA}"
+            task commitlint -- -V --from "${from}" --to "${GITHUB_SHA}"
+          fi
+        fi
+
+  lint-pr-commit-msg:
+    desc: Make sure a PR title+body will conform to the commit convention once squash merged
+    vars:
+      PR_TITLE:
+        sh: echo $GITHUB_CONTEXT | jq -r '.event.pull_request.title'
+      PR_NUMBER:
+        sh: echo $GITHUB_CONTEXT | jq -r '.event.pull_request.number'
+      PR_BODY:
+        sh: echo $GITHUB_CONTEXT | jq -r '.event.pull_request.body'
+    cmds:
+      - |
+        if [ "${GITHUB_EVENT_NAME:-}" == "pull_request" ]; then
+          echo -e "{{.PR_TITLE}} (#{{.PR_NUMBER}})\n\n{{.PR_BODY}}" | task commitlint -- -V
+        fi
+
+  test:
+    desc: Executes a bash test suite over the bootstrap script
+    summary: |
+      Keep in mind the very fact you can actually execute this task via the
+      bootstrap script is in fact a full end to end test in and of it's self.
+    cmds:
+      - rm -rf ./tests/mocks
+      - git submodule update --init --recursive
+      - bats ./tests
+      - rm -rf ./tests/mocks
+
+  build:
+    desc: Prepares a release-able version of the bootstrap script.
+    vars:
+      VERSION: '{{default "0.0.0-local" .VERSION}}'
+    cmds:
+      - rm -rf ./assets
+      - mkdir -p ./assets
+      - cp ./task ./assets/asdf-bootstrap.sh
+      - "sed -i -e 's/version: 0.0.0/version: {{.VERSION}}/g' ./assets/asdf-bootstrap.sh"

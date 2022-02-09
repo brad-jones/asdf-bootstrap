@@ -1,0 +1,18 @@
+# Run this workflow whenever something changes about a PR.
+# Even if someone changes as the PR title &/or body we want to know about it
+# because we lint those things to ensure they will generate valid commit
+# messages when squash merged.
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - edited
+
+jobs:
+  checks:
+    # We can not simply just reference the workflow as a local relative path.
+    # Something about being in the context of the merge commit, etc...
+    # see: https://github.com/github/feedback/discussions/10679
+    uses: brad-jones/asdf-bootstrap/.github/workflows/checks.yml@master
