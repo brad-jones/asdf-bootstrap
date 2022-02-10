@@ -125,8 +125,12 @@ tasks:
       CAS_SHA256: 7d6aac67ccee9c149b74defbbb57813238e9ad3939a2f09268fd920d6110b536
       CAS_API_KEY: '{{default "unauthorized" .CAS_API_KEY}}'
       VERSION: '{{default "0.0.0-local" .VERSION}}'
+    env:
+      CAS_API_KEY: "{{.CAS_API_KEY}}"
     cmds:
       - curl -L https://github.com/codenotary/cas/releases/download/v{{.CAS_VERSION}}/cas-v{{.CAS_VERSION}}-linux-amd64 > /tmp/cas
       - echo "{{.CAS_SHA256}} /tmp/cas" | sha256sum -c && chmod +x /tmp/cas || (rm -f /tmp/cas && exit 1)
-      - /tmp/cas n --api-key {{.CAS_API_KEY}} --name https://github.com/brad-jones/asdf-bootstrap/releases/download/v{{.VERSION}}/asdf-bootstrap.sh ./assets/asdf-bootstrap.sh
+      - /tmp/cas login
+      - /tmp/cas n --name https://github.com/brad-jones/asdf-bootstrap/releases/download/v{{.VERSION}}/asdf-bootstrap.sh ./assets/asdf-bootstrap.sh
+      - /tmp/cas logout
       - rm -f /tmp/cas
