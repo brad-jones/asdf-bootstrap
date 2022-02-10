@@ -127,6 +127,6 @@ tasks:
       VERSION: '{{default "0.0.0-local" .VERSION}}'
     cmds:
       - curl -L https://github.com/codenotary/cas/releases/download/v{{.CAS_VERSION}}/cas-v{{.CAS_VERSION}}-linux-amd64 > /tmp/cas
-      - echo "{{.CAS_SHA256}} /tmp/cas" | sha256sum -c && chmod +x /tmp/cas || rm -f /tmp/cas && exit 1
+      - echo "{{.CAS_SHA256}} /tmp/cas" | sha256sum -c && chmod +x /tmp/cas || (rm -f /tmp/cas && exit 1)
       - /tmp/cas n --api-key {{.CAS_API_KEY}} --name https://github.com/brad-jones/asdf-bootstrap/releases/download/v{{.VERSION}}/asdf-bootstrap.sh ./assets/asdf-bootstrap.sh
       - rm -f /tmp/cas
