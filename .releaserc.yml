@@ -41,7 +41,7 @@ plugins:
   # Build the release artifacts
   # This includes tarballs, rpms/debs, docker images, etc
   - - "@semantic-release/exec"
-    - prepareCmd: "./task build VERSION=${nextRelease.version}"
+    - prepareCmd: "./task prepare VERSION=${nextRelease.version}"
 
   # Commit CHANGELOG.md back to repo
   - - "@semantic-release/git"
@@ -53,3 +53,7 @@ plugins:
     - assets:
         - path: "./assets/**/*"
         - path: "./assets/**/*.*"
+
+  # Run final publish tasks, such as docker push
+  - - "@semantic-release/exec"
+    - publishCmd: "./task publish VERSION=${nextRelease.version}"

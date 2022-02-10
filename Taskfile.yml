@@ -108,7 +108,7 @@ tasks:
       - bats ./tests
       - rm -rf ./tests/mocks
 
-  build:
+  prepare:
     desc: Prepares a release-able version of the bootstrap script.
     vars:
       VERSION: '{{default "0.0.0-local" .VERSION}}'
@@ -117,3 +117,16 @@ tasks:
       - mkdir -p ./assets
       - cp ./task ./assets/asdf-bootstrap.sh
       - "sed -i -e 's/version: 0.0.0/version: {{.VERSION}}/g' ./assets/asdf-bootstrap.sh"
+
+  publish:
+    desc: "Publishes the prepared assets. eg: docker push"
+    vars:
+      CAS_VERSION: "1.0.2"
+      CAS_SHA256: 7d6aac67ccee9c149b74defbbb57813238e9ad3939a2f09268fd920d6110b536
+      CAS_API_KEY: '{{default "unauthorized" .CAS_API_KEY}}'
+      VERSION: '{{default "0.0.0-local" .VERSION}}'
+    cmds:
+      - curl -L https://github.com/codenotary/cas/releases/download/v{{.CAS_VERSION}}/cas-v{{.CAS_VERSION}}-linux-amd64 > /tmp/cas
+      - echo "{{.CAS_SHA256}} /tmp/cas" | sha256sum -c && chmod +x /tmp/cas || rm -f /tmp/cas && exit 1
+      - /tmp/cas n --api-key {{.CAS_API_KEY}} --name https://github.com/brad-jones/asdf-bootstrap/releases/download/v{{.VERSION}}/asdf-bootstrap.sh ./assets/asdf-bootstrap.sh
+      - rm -f /tmp/cas

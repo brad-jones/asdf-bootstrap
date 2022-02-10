@@ -74,3 +74,4 @@ jobs:
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+          CAS_API_KEY: ${{ secrets.CAS_API_KEY }}
