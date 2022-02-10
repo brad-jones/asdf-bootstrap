@@ -1,3 +1,10 @@
+### [1.0.3](https://github.com/brad-jones/asdf-bootstrap/compare/v1.0.2...v1.0.3) (2022-02-10)
+
+
+### Automation
+
+* **cas:** fix cas login, api-key flag didn't appear to work ([c954e97](https://github.com/brad-jones/asdf-bootstrap/commit/c954e971154091a41483392b67f74db4d078a76c))
+
 ### [1.0.2](https://github.com/brad-jones/asdf-bootstrap/compare/v1.0.1...v1.0.2) (2022-02-10)
 
 
