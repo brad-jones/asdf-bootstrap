@@ -1,3 +1,10 @@
+### [1.0.2](https://github.com/brad-jones/asdf-bootstrap/compare/v1.0.1...v1.0.2) (2022-02-10)
+
+
+### Automation
+
+* **cas:** fix verification of the cas tool it's self ([373a630](https://github.com/brad-jones/asdf-bootstrap/commit/373a630f0343a03f1ed04968971185fe57404755))
+
 ### [1.0.1](https://github.com/brad-jones/asdf-bootstrap/compare/v1.0.0...v1.0.1) (2022-02-10)
 
 
