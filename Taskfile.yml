@@ -112,6 +112,7 @@ tasks:
     desc: Prepares a release-able version of the bootstrap script.
     vars:
       VERSION: '{{default "0.0.0-local" .VERSION}}'
+    env:
       COSIGN_EXPERIMENTAL: "1"
     cmds:
       - rm -rf ./assets
