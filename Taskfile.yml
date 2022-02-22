@@ -119,12 +119,17 @@ tasks:
       - mkdir -p ./assets
       - cp ./task ./assets/asdf-bootstrap.sh
       - "sed -i -e 's/version: 0.0.0/version: {{.VERSION}}/g' ./assets/asdf-bootstrap.sh"
+      # https://shibumi.dev/posts/first-look-into-cosign/
+      # https://shibumi.dev/posts/what-are-ephemeral-certificates/
+      # https://shibumi.dev/posts/keyless-signatures-with-github-actions/
       - |
         cosign sign-blob \
           --oidc-issuer https://token.actions.githubusercontent.com \
           --output-signature ./assets/asdf-bootstrap.sh.sig \
           --output-certificate ./assets/asdf-bootstrap.sh.pem \
           ./assets/asdf-bootstrap.sh
+      # To verify (tip http sources are allowed, handy for the signature):
+      # COSIGN_EXPERIMENTAL=1 cosign verify-blob --signature asdf-bootstrap.sh.sig asdf-bootstrap.sh
 
   publish:
     desc: "Publishes the prepared assets. eg: docker push"
