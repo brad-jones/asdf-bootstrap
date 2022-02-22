@@ -1,3 +1,13 @@
+### [1.0.4](https://github.com/brad-jones/asdf-bootstrap/compare/v1.0.3...v1.0.4) (2022-02-22)
+
+
+### Automation
+
+* **cosign:** enable OIDC with id-token permission ([22389e2](https://github.com/brad-jones/asdf-bootstrap/commit/22389e2be4277ae594da4383e5d102e8244017a0))
+* **cosign:** need to make COSIGN_EXPERIMENTAL and env var ([0b87fff](https://github.com/brad-jones/asdf-bootstrap/commit/0b87fffbe595362c8025fc4977e9f44804e17971))
+* **cosign:** set the oidc-issuer to github's token.actions endpoint ([7dbadb8](https://github.com/brad-jones/asdf-bootstrap/commit/7dbadb89871da9587cac90e09d01e5268e9d83f9))
+* **cosign:** sign our releases with sigstore ([e6783d6](https://github.com/brad-jones/asdf-bootstrap/commit/e6783d6e23b3ef386e0ab52273bb841d8faafe08))
+
 ### [1.0.3](https://github.com/brad-jones/asdf-bootstrap/compare/v1.0.2...v1.0.3) (2022-02-10)
 
 
