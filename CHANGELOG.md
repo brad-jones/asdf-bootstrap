@@ -1,3 +1,10 @@
+### [1.0.5](https://github.com/brad-jones/asdf-bootstrap/compare/v1.0.4...v1.0.5) (2022-02-22)
+
+
+### Misc
+
+* **cosign:** just some notes about the sigstore so I don't forget ([8269302](https://github.com/brad-jones/asdf-bootstrap/commit/8269302d1de97bc7f45dd0ee21207b4b01b56dcd))
+
 ### [1.0.4](https://github.com/brad-jones/asdf-bootstrap/compare/v1.0.3...v1.0.4) (2022-02-22)
 
 
