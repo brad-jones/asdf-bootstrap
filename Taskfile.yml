@@ -121,6 +121,7 @@ tasks:
       - "sed -i -e 's/version: 0.0.0/version: {{.VERSION}}/g' ./assets/asdf-bootstrap.sh"
       - |
         cosign sign-blob \
+          --oidc-issuer https://token.actions.githubusercontent.com \
           --output-signature ./assets/asdf-bootstrap.sh.sig \
           --output-certificate ./assets/asdf-bootstrap.sh.pem \
           ./assets/asdf-bootstrap.sh
