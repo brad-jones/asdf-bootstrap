@@ -112,11 +112,17 @@ tasks:
     desc: Prepares a release-able version of the bootstrap script.
     vars:
       VERSION: '{{default "0.0.0-local" .VERSION}}'
+      COSIGN_EXPERIMENTAL: "1"
     cmds:
       - rm -rf ./assets
       - mkdir -p ./assets
       - cp ./task ./assets/asdf-bootstrap.sh
       - "sed -i -e 's/version: 0.0.0/version: {{.VERSION}}/g' ./assets/asdf-bootstrap.sh"
+      - |
+        cosign sign-blob \
+          --output-signature ./assets/asdf-bootstrap.sh.sig \
+          --output-certificate ./assets/asdf-bootstrap.sh.pem \
+          ./assets/asdf-bootstrap.sh
 
   publish:
     desc: "Publishes the prepared assets. eg: docker push"

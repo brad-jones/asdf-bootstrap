@@ -48,12 +48,12 @@ plugins:
     - assets: [CHANGELOG.md]
       message: "chore(release): update changelog [skip ci]"
 
+  # Run final publish tasks, such as docker push
+  - - "@semantic-release/exec"
+    - publishCmd: "./task publish VERSION=${nextRelease.version}"
+
   # Create new github release
   - - "@semantic-release/github"
     - assets:
         - path: "./assets/**/*"
         - path: "./assets/**/*.*"
-
-  # Run final publish tasks, such as docker push
-  - - "@semantic-release/exec"
-    - publishCmd: "./task publish VERSION=${nextRelease.version}"

@@ -6,3 +6,4 @@ shellcheck https://github.com/luizm/asdf-shellcheck.git 2c72b1f6a4012e91900a6e74
 shfmt https://github.com/luizm/asdf-shfmt.git f8932529429eefe30af8efb23487d99d5c509278
 task https://github.com/particledecay/asdf-task.git c8c826a014c522f6ee38ec5fcffa10d7277e7930
 gh https://github.com/bartlomiejdanek/asdf-github-cli.git d449199438caf7b80481eafd8005b2937046ace4
+cosign https://gitlab.com/wt0f/asdf-cosign.git 2e53d7161443e7bd0e761d58354347a53c277b8a
