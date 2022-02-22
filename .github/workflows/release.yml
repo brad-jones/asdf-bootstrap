@@ -24,6 +24,11 @@ jobs:
       group: ${{ github.ref }}
       cancel-in-progress: false
 
+    # Enable OIDC
+    # see: https://blog.chainguard.dev/zero-friction-keyless-signing-with-github-actions/
+    permissions:
+      id-token: write
+
     steps:
       # Login as a Github App bot user (installation token), instead of using
       # the built in "secrets.GITHUB_TOKEN" as this gives us greater flexibility
