@@ -268,7 +268,7 @@
     if [ -f "${dir}/cosign" ]; then return; fi
 
     # download cosign and it's signature
-    log_heading "Installing cosign tool"
+    log_heading "Installing cosign (internal utility)"
     mkdir -p "${dir}"
     echo "downloading: ${url}"
     curl -L "${url}" -o "${dir}/cosign"
@@ -306,7 +306,7 @@
     if [ -f "${dir}/hashdir" ]; then return; fi
 
     # download hashdir
-    log_heading "Installing hashdir tool"
+    log_heading "Installing hashdir (internal utility)"
     mkdir -p "${dir}"
     echo "downloading: ${url}"
     curl -L "${url}" -o "${dir}/hashdir"
