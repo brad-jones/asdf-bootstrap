@@ -1,3 +1,10 @@
+### [1.3.3](https://github.com/brad-jones/asdf-bootstrap/compare/v1.3.2...v1.3.3) (2022-02-23)
+
+
+### Misc
+
+* added initial version of README ([3ca4d99](https://github.com/brad-jones/asdf-bootstrap/commit/3ca4d99e3a8671c7c5d75293b9edc2e9d2fb77b9))
+
 ### [1.3.2](https://github.com/brad-jones/asdf-bootstrap/compare/v1.3.1...v1.3.2) (2022-02-23)
 
 
