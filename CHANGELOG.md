@@ -1,3 +1,10 @@
+## [1.3.0](https://github.com/brad-jones/asdf-bootstrap/compare/v1.2.0...v1.3.0) (2022-02-23)
+
+
+### Features
+
+* **selfupdate:** script is now self updating ([02bc66c](https://github.com/brad-jones/asdf-bootstrap/commit/02bc66c8f75392d3f1e8a1a405d1a0ffb5c4ba32))
+
 ## [1.2.0](https://github.com/brad-jones/asdf-bootstrap/compare/v1.1.0...v1.2.0) (2022-02-23)
 
 
