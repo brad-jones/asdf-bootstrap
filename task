@@ -57,8 +57,8 @@
     # --------------------------------------------------------------------------
     # All variables are overideable through "ASDF_LOCAL_*" equivalents.
     export ASDF_VERSION="${ASDF_LOCAL_VERSION:-"v0.9.0"}"
-    export ASDF_COSIGN_VERSION="${ASDF_LOCAL_COSIGN_VERSION:-"v1.5.2"}"
-    export ASDF_HASHDIR_VERSION="${ASDF_LOCAL_HASHDIR_VERSION:-"v1.0.5"}"
+    export ASDF_UTIL_COSIGN_VERSION="${ASDF_LOCAL_UTIL_COSIGN_VERSION:-"v1.5.2"}"
+    export ASDF_UTIL_HASHDIR_VERSION="${ASDF_LOCAL_UTIL_HASHDIR_VERSION:-"v1.0.5"}"
     export ASDF_REPO="${ASDF_LOCAL_REPO:-"https://github.com/asdf-vm/asdf.git"}"
     export ASDF_DIR="${ASDF_LOCAL_DIR:-"${ASDF_SCRIPT_DIR}/.asdf/${ASDF_VERSION}"}"
     export ASDF_UTILS_DIR="${ASDF_LOCAL_UTILS_DIR:-"${ASDF_SCRIPT_DIR}/.asdf/utils"}"
@@ -141,11 +141,11 @@
     # We need this to verify other tools that we install, such as hashdir along
     # with the self update functionality of this very script.
     # Doing our bit to secure the software supply chain.
-    install_cosign "${os}" "${arch}" "${ASDF_COSIGN_VERSION}" "${ASDF_UTILS_DIR}"
+    install_cosign "${os}" "${arch}" "${ASDF_UTIL_COSIGN_VERSION}" "${ASDF_UTILS_DIR}"
 
     # Install the hashdir tool that this script uses for the lockfile functionality
     # see: https://github.com/brad-jones/hashdir
-    install_hashdir "${os}" "${arch}" "${ASDF_HASHDIR_VERSION}" "${ASDF_UTILS_DIR}"
+    install_hashdir "${os}" "${arch}" "${ASDF_UTIL_HASHDIR_VERSION}" "${ASDF_UTILS_DIR}"
 
     # Install asdf, the asdf plugins & our tools.
     install_asdf "${ASDF_REPO}" "${ASDF_VERSION}" "${ASDF_DIR}"
