@@ -1,3 +1,15 @@
+## [1.2.0](https://github.com/brad-jones/asdf-bootstrap/compare/v1.1.0...v1.2.0) (2022-02-23)
+
+
+### Features
+
+* **speedlock:** added a new config option, speeds up script start time ([b8e27fb](https://github.com/brad-jones/asdf-bootstrap/commit/b8e27fb023b5e9a59713b290c066d8917e0650e3))
+
+
+### Automation
+
+* reenable asdf tool cache ([f47e3b1](https://github.com/brad-jones/asdf-bootstrap/commit/f47e3b193765b111fcb794463d7174b04e52e288))
+
 ## [1.1.0](https://github.com/brad-jones/asdf-bootstrap/compare/v1.0.5...v1.1.0) (2022-02-23)
 
 
