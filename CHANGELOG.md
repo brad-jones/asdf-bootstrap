@@ -1,3 +1,10 @@
+### [1.3.4](https://github.com/brad-jones/asdf-bootstrap/compare/v1.3.3...v1.3.4) (2022-02-23)
+
+
+### Misc
+
+* added that start of a contrib guide ([f8bd00b](https://github.com/brad-jones/asdf-bootstrap/commit/f8bd00b0efdce2b8d9ab6646959b82020380678a))
+
 ### [1.3.3](https://github.com/brad-jones/asdf-bootstrap/compare/v1.3.2...v1.3.3) (2022-02-23)
 
 
