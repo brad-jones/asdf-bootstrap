@@ -57,6 +57,7 @@
     # --------------------------------------------------------------------------
     # All variables are overideable through "ASDF_LOCAL_*" equivalents.
     export ASDF_VERSION="${ASDF_LOCAL_VERSION:-"v0.9.0"}"
+    export ASDF_SPEED_LOCK="${ASDF_LOCAL_SPEED_LOCK:-"1"}"
     export ASDF_UTIL_COSIGN_VERSION="${ASDF_LOCAL_UTIL_COSIGN_VERSION:-"v1.5.2"}"
     export ASDF_UTIL_HASHDIR_VERSION="${ASDF_LOCAL_UTIL_HASHDIR_VERSION:-"v1.0.5"}"
     export ASDF_REPO="${ASDF_LOCAL_REPO:-"https://github.com/asdf-vm/asdf.git"}"
@@ -392,7 +393,13 @@
           create_shim_of_shim "${tool}"
           echo ""
         else
-          ensure_lock_matches "${tool}" "${version}"
+          # When ASDF_SPEED_LOCK is set to 1 (the default) we will not bother
+          # re-checking the lockfile for tools that at least "appear" to already
+          # be installed. This speeds up the start time of this script significantly.
+          # And the author belives it's an acceptable compromise.
+          if [ "${ASDF_SPEED_LOCK}" != "1" ]; then
+            ensure_lock_matches "${tool}" "${version}"
+          fi
         fi
       fi
     done
