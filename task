@@ -57,9 +57,11 @@
     # --------------------------------------------------------------------------
     # All variables are overideable through "ASDF_LOCAL_*" equivalents.
     export ASDF_VERSION="${ASDF_LOCAL_VERSION:-"v0.9.0"}"
-    export ASDF_HASHDIR_VERSION="${ASDF_LOCAL_HASHDIR_VERSION:-"v1.0.2"}"
+    export ASDF_COSIGN_VERSION="${ASDF_LOCAL_COSIGN_VERSION:-"v1.5.2"}"
+    export ASDF_HASHDIR_VERSION="${ASDF_LOCAL_HASHDIR_VERSION:-"v1.0.5"}"
     export ASDF_REPO="${ASDF_LOCAL_REPO:-"https://github.com/asdf-vm/asdf.git"}"
     export ASDF_DIR="${ASDF_LOCAL_DIR:-"${ASDF_SCRIPT_DIR}/.asdf/${ASDF_VERSION}"}"
+    export ASDF_UTILS_DIR="${ASDF_LOCAL_UTILS_DIR:-"${ASDF_SCRIPT_DIR}/.asdf/utils"}"
     export ASDF_DATA_DIR="${ASDF_LOCAL_DATA_DIR:-"${ASDF_DIR}"}"
     export ASDF_CONFIG_FILE="${ASDF_LOCAL_CONFIG_FILE:-"${ASDF_SCRIPT_DIR}/.asdf/.asdfrc"}"
     export ASDF_PLUGIN_VERSIONS_FILENAME="${ASDF_LOCAL_PLUGIN_VERSIONS_FILENAME:-"${ASDF_SCRIPT_DIR}/.asdf/.plugin-versions"}"
@@ -123,14 +125,27 @@
     ensure_command_exists "sort" "https://en.wikipedia.org/wiki/Sort_(Unix)"
     ensure_command_exists "tar" "https://www.gnu.org/software/tar"
     ensure_command_exists "uname" "https://en.wikipedia.org/wiki/Uname"
+    ensure_command_exists "openssl" "https://www.openssl.org"
+    ensure_command_exists "base64" "https://linux.die.net/man/1/base64"
 
     # Delete the existing asdf directory if ASDF_LOCAL_REINSTALL=1
     # This is handy for testing this script :)
     if [ -n "${ASDF_LOCAL_REINSTALL+x}" ]; then
       rm -rf "${ASDF_DIR}"
       rm -rf "${ASDF_SCRIPT_DIR}/.asdf/bin"
+      rm -rf "${ASDF_SCRIPT_DIR}/.asdf/utils"
       rm -rf "${ASDF_TOOL_VERSIONS_LOCKFILE}"
     fi
+
+    # Install cosign, a CLI tool to interface with https://www.sigstore.dev
+    # We need this to verify other tools that we install, such as hashdir along
+    # with the self update functionality of this very script.
+    # Doing our bit to secure the software supply chain.
+    install_cosign "${os}" "${arch}" "${ASDF_COSIGN_VERSION}" "${ASDF_UTILS_DIR}"
+
+    # Install the hashdir tool that this script uses for the lockfile functionality
+    # see: https://github.com/brad-jones/hashdir
+    install_hashdir "${os}" "${arch}" "${ASDF_HASHDIR_VERSION}" "${ASDF_UTILS_DIR}"
 
     # Install asdf, the asdf plugins & our tools.
     install_asdf "${ASDF_REPO}" "${ASDF_VERSION}" "${ASDF_DIR}"
@@ -241,6 +256,71 @@
     esac
   }
 
+  function install_cosign {
+    local os="$1"
+    local arch="$2"
+    local version="$3"
+    local dir="$4"
+    local baseURL="https://github.com/sigstore/cosign/releases/download/${version}"
+    local url="${baseURL}/cosign-${os}-${arch}"
+
+    # bail out if already installed
+    if [ -f "${dir}/cosign" ]; then return; fi
+
+    # download cosign and it's signature
+    log_heading "Installing cosign tool"
+    mkdir -p "${dir}"
+    echo "downloading: ${url}"
+    curl -L "${url}" -o "${dir}/cosign"
+    echo "downloading: ${url}.sig"
+    curl -L "${url}.sig" -o "${dir}/cosign.sig"
+    echo "downloading: ${baseURL}/release-cosign.pub"
+    curl -L "${baseURL}/release-cosign.pub" -o "${dir}/cosign.pem"
+
+    # verify cosign with openssl
+    echo "performing offline verification of cosign with openssl"
+    openssl dgst -sha256 -verify "${dir}/cosign.pem" -signature <(base64 -d <"${dir}/cosign.sig") "${dir}/cosign" ||
+      (rm -f "${dir}/cosign" && rm -f "${dir}/cosign.pem" && rm -f "${dir}/cosign.pub" && exit 1)
+    rm -f "${dir}/cosign.pem"
+    rm -f "${dir}/cosign.pub"
+    chmod +x "${dir}/cosign"
+
+    # if thats ok, lets use cosign to verify it's self
+    # this will make sure there is a valid entry in rekor
+    echo "performing online verification of cosign with cosign"
+    COSIGN_EXPERIMENTAL=1 "${dir}/cosign" verify-blob --signature "${url}-keyless.sig" "${dir}/cosign" ||
+      (rm -f "${dir}/cosign" && rm -f "${dir}/cosign.pem" && rm -f "${dir}/cosign.pub" && exit 1)
+
+    echo "protecting your supply chain with https://www.sigstore.dev"
+    echo ""
+  }
+
+  function install_hashdir {
+    local os="$1"
+    local arch="$2"
+    local version="$3"
+    local dir="$4"
+    local url="https://github.com/brad-jones/hashdir/releases/download/${version}/hashdir_${os}_${arch}"
+
+    # bail out if already installed
+    if [ -f "${dir}/hashdir" ]; then return; fi
+
+    # download hashdir
+    log_heading "Installing hashdir tool"
+    mkdir -p "${dir}"
+    echo "downloading: ${url}"
+    curl -L "${url}" -o "${dir}/hashdir"
+
+    # verify hashdir with cosign
+    echo "performing online verification of hashdir with cosign"
+    COSIGN_EXPERIMENTAL=1 "${dir}/cosign" verify-blob --signature "${url}.sig" "${dir}/hashdir" ||
+      (rm -f "${dir}/hashdir" && exit 1)
+    chmod +x "${dir}/hashdir"
+
+    echo "protecting your supply chain with https://www.sigstore.dev"
+    echo ""
+  }
+
   function install_asdf {
     local repo="$1"
     local version="$2"
@@ -303,20 +383,6 @@
   function install_asdf_tools {
     local toolVersionsFile="$1"
     local dir="$2"
-
-    if ! [ -f "${ASDF_SCRIPT_DIR}/.asdf/bin/hashdir" ]; then
-      log_heading "Installing hashdir tool"
-      local os arch hashDirUrl
-      os="$(get_os)"
-      arch="$(get_arch)"
-      hashDirUrl="https://github.com/brad-jones/hashdir/releases/download/${ASDF_HASHDIR_VERSION}/hashdir_${os}_${arch}"
-      mkdir -p "${ASDF_SCRIPT_DIR}/.asdf/bin"
-      echo "from: ${hashDirUrl}"
-      curl -L "${hashDirUrl}" -o "${ASDF_SCRIPT_DIR}/.asdf/bin/hashdir"
-      chmod +x "${ASDF_SCRIPT_DIR}/.asdf/bin/hashdir"
-      echo ""
-    fi
-
     echo -e "$(cat "${toolVersionsFile}")\n" | while read -r tool version; do
       if [ "${tool}" != "" ]; then
         if [ ! -d "${dir}/installs/${tool}/${version}" ]; then
@@ -385,7 +451,7 @@
     local path result os arch
     path="$1"
 
-    result="$("${ASDF_SCRIPT_DIR}"/.asdf/bin/hashdir -alg sha512 "${path}")"
+    result="$("${ASDF_UTILS_DIR}"/hashdir -alg sha512 "${path}")"
     echo "sha512:${result}"
   }
 
