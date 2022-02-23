@@ -15,9 +15,6 @@
 # as the sole entrypoint into your build automation. Commit a copy of this script
 # into your repo and manage it as if it was your own.
 #
-# > TODO: Can we come up with some semi-automated way to apply updates to the
-# >       script through a git diff / patch file?
-#
 # This script will do the following things:
 #
 #  - Installs an isolated "local" version of https://asdf-vm.com
@@ -32,6 +29,9 @@
 #  - Also adds .tool-version.lock support in a similar vane to
 #    yarn.lock, package-lock.json, go.sum & others.
 #    This is opt-out by setting ASDF_LOCAL_TOOL_VERSIONS_LOCKFILE=false
+#
+#  - Makes use of the https://www.sigstore.dev to help secure the
+#    software supply chain.
 #
 #  - Finally it passes control over to one of the installed tools.
 #    By default it will execute a tool by the same name as whatever
@@ -68,6 +68,9 @@
     export ASDF_PLUGIN_VERSIONS_FILENAME="${ASDF_LOCAL_PLUGIN_VERSIONS_FILENAME:-"${ASDF_SCRIPT_DIR}/.asdf/.plugin-versions"}"
     export ASDF_DEFAULT_TOOL_VERSIONS_FILENAME="${ASDF_LOCAL_DEFAULT_TOOL_VERSIONS_FILENAME:-"${ASDF_SCRIPT_DIR}/.tool-versions"}"
     export ASDF_TOOL_VERSIONS_LOCKFILE="${ASDF_LOCAL_TOOL_VERSIONS_LOCKFILE:-"${ASDF_DEFAULT_TOOL_VERSIONS_FILENAME}.lock"}"
+    export ASDF_BOOTSTRAP_LATEST_URL="${ASDF_LOCAL_BOOTSTRAP_LATEST_URL:-"https://github.com/brad-jones/asdf-bootstrap/releases/latest/download/asdf-bootstrap.sh"}"
+    export ASDF_BOOTSTRAP_UPDATED_FILENAME="${ASDF_LOCAL_BOOTSTRAP_UPDATED_FILENAME:-"${ASDF_SCRIPT_DIR}/.asdf/.updated"}"
+    export ASDF_BOOTSTRAP_UPDATED_EXPIRATION_SECONDS="${ASDF_LOCAL_BOOTSTRAP_UPDATED_EXPIRATION_SECONDS:-"86400"}"
     # --------------------------------------------------------------------------
     # >>> EDITME: Script Config
 
@@ -142,11 +145,22 @@
     # We need this to verify other tools that we install, such as hashdir along
     # with the self update functionality of this very script.
     # Doing our bit to secure the software supply chain.
-    install_cosign "${os}" "${arch}" "${ASDF_UTIL_COSIGN_VERSION}" "${ASDF_UTILS_DIR}"
+    install_cosign "${os}" "${arch}" \
+      "${ASDF_UTIL_COSIGN_VERSION}" "${ASDF_UTILS_DIR}"
+
+    # Self update check.
+    # The script will now check for a new version of it's self and offer to update.
+    # Opt out by setting $ASDF_BOOTSTRAP_UPDATED_EXPIRATION_SECONDS to -1
+    self_update "${os}" "${arch}" \
+      "${ASDF_BOOTSTRAP_LATEST_URL}" \
+      "${ASDF_BOOTSTRAP_UPDATED_FILENAME}" \
+      "${ASDF_BOOTSTRAP_UPDATED_EXPIRATION_SECONDS}" \
+      "$@"
 
     # Install the hashdir tool that this script uses for the lockfile functionality
     # see: https://github.com/brad-jones/hashdir
-    install_hashdir "${os}" "${arch}" "${ASDF_UTIL_HASHDIR_VERSION}" "${ASDF_UTILS_DIR}"
+    install_hashdir "${os}" "${arch}" \
+      "${ASDF_UTIL_HASHDIR_VERSION}" "${ASDF_UTILS_DIR}"
 
     # Install asdf, the asdf plugins & our tools.
     install_asdf "${ASDF_REPO}" "${ASDF_VERSION}" "${ASDF_DIR}"
@@ -475,6 +489,95 @@
     done
     load_dot_env "${tmpFile}"
     rm -f "${tmpFile}"
+  }
+
+  function self_update {
+    local os="$1"
+    local arch="$2"
+    local latestUrl="$3"
+    local updatedFile="$4"
+    local expiration="$5"
+    expiration=$((expiration + 0))
+    local args="$6"
+
+    # Bail out if the self update functionality has been disabled
+    if ((expiration == -1)); then return; fi
+
+    # Bail out if a human is not their to accept update
+    if ! [ -t 0 ]; then return; fi
+
+    # Decide if we need to bother checking for an update
+    # Checking on every script start would be too slow
+    # Defaults to checking at least every 24 hours.
+    local update="0"
+    if [ -f "${updatedFile}" ]; then
+      local now
+      now=$(date +%s)
+      now=$((now + 0))
+
+      local updatedAt
+      updatedAt=$(cat "${updatedFile}")
+      updatedAt=$((updatedAt + 0))
+
+      if ((now - updatedAt > expiration)); then
+        update="1"
+      fi
+    else
+      update="1"
+    fi
+
+    if [ "${update}" == "1" ]; then
+      log_heading "Self Update"
+
+      echo "downloading: ${latestUrl}"
+      curl -L "${latestUrl}" -o "${BASH_SOURCE[0]}.new"
+      echo "written: ${BASH_SOURCE[0]}.new"
+      echo ""
+
+      echo "verifying new version with cosign"
+      COSIGN_EXPERIMENTAL=1 "${ASDF_UTILS_DIR}/cosign" verify-blob \
+        --signature "${latestUrl}.sig" "${BASH_SOURCE[0]}.new" ||
+        (rm -f "${BASH_SOURCE[0]}.new" && exit 1)
+      echo "protecting your supply chain with https://www.sigstore.dev"
+      echo ""
+
+      local currentVersion
+      currentVersion="$(grep '# version:' <"${BASH_SOURCE[0]}" | head -n 1 | sed -e 's/# version: //g')"
+      echo "current version: ${currentVersion}"
+
+      local newVersion
+      newVersion="$(grep '# version:' <"${BASH_SOURCE[0]}.new" | head -n 1 | sed -e 's/# version: //g')"
+      echo "new version: ${newVersion}"
+      echo ""
+
+      diff "${BASH_SOURCE[0]}" "${BASH_SOURCE[0]}.new" ||
+        (
+          echo ""
+          echo "Are you happy with these changes?"
+          select yn in "Yes" "No"; do
+            case $yn in
+            Yes)
+              mv "${BASH_SOURCE[0]}.new" "${BASH_SOURCE[0]}"
+              chmod +x "${BASH_SOURCE[0]}"
+              date +%s >"${updatedFile}"
+              echo "Executing new version of script..."
+              echo ""
+              exec "${BASH_SOURCE[0]}" "$args"
+              break
+              ;;
+            No)
+              rm -f "${BASH_SOURCE[0]}.new"
+              date +%s >"${updatedFile}"
+              exit
+              ;;
+            esac
+          done
+        )
+
+      rm -f "${BASH_SOURCE[0]}.new"
+      date +%s >"${updatedFile}"
+    fi
+
   }
 
   # Execute the script
