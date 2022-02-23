@@ -25,15 +25,15 @@ jobs:
         with:
           fetch-depth: 0 # fetch everything so we can lint all commits
 
-      #- name: Cache ASDF Tools
-      #  uses: actions/cache@v2.1.7
-      #  with:
-      #    key: ${{ runner.os }}-asdf3-${{ hashFiles('task', '.tool-versions', '.tool-versions.lock', '.asdf/.plugin-versions') }}
-      #    restore-keys: ${{ runner.os }}-asdf3-
-      #    path: |
-      #      ./.asdf/bin/**/*
-      #      ./.asdf/utils/**/*
-      #      ./.asdf/v0.9.0/**/*
+      - name: Cache ASDF Tools
+        uses: actions/cache@v2.1.7
+        with:
+          key: ${{ runner.os }}-asdf4-${{ hashFiles('task', '.tool-versions', '.tool-versions.lock', '.asdf/.plugin-versions') }}
+          restore-keys: ${{ runner.os }}-asdf4-
+          path: |
+            ./.asdf/bin/**/*
+            ./.asdf/utils/**/*
+            ./.asdf/v0.9.0/**/*
 
       - name: Cache Node Modules
         uses: actions/cache@v2.1.7
@@ -58,15 +58,15 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2.4.0
 
-      #- name: Cache ASDF Tools
-      #  uses: actions/cache@v2.1.7
-      #  with:
-      #    key: ${{ runner.os }}-asdf3-${{ hashFiles('task', '.tool-versions', '.tool-versions.lock', '.asdf/.plugin-versions') }}
-      #    restore-keys: ${{ runner.os }}-asdf3-
-      #    path: |
-      #      ./.asdf/bin/**/*
-      #      ./.asdf/utils/**/*
-      #      ./.asdf/v0.9.0/**/*
+      - name: Cache ASDF Tools
+        uses: actions/cache@v2.1.7
+        with:
+          key: ${{ runner.os }}-asdf4-${{ hashFiles('task', '.tool-versions', '.tool-versions.lock', '.asdf/.plugin-versions') }}
+          restore-keys: ${{ runner.os }}-asdf4-
+          path: |
+            ./.asdf/bin/**/*
+            ./.asdf/utils/**/*
+            ./.asdf/v0.9.0/**/*
 
       - name: Execute Tests
         run: ./task test
