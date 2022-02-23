@@ -1,3 +1,23 @@
+## [1.1.0](https://github.com/brad-jones/asdf-bootstrap/compare/v1.0.5...v1.1.0) (2022-02-23)
+
+
+### Features
+
+* **cosign:** use sigstore to verify the hashdir cli ([143cba7](https://github.com/brad-jones/asdf-bootstrap/commit/143cba7e63527cf7e23196452bde0485a4f7e582))
+* **utils:** differentiate tools this script uses from ones it installs ([f153c13](https://github.com/brad-jones/asdf-bootstrap/commit/f153c13b01a9741da3532f7e7c33123107de7675))
+
+
+### Bug Fixes
+
+* **cosign:** dont override cosign version env var ([4ba14b8](https://github.com/brad-jones/asdf-bootstrap/commit/4ba14b828ebdaff627ae89433c3c84536cbcc517))
+
+
+### Automation
+
+* bust the asdf cache and add the utils dir ([14489f5](https://github.com/brad-jones/asdf-bootstrap/commit/14489f5b8f74e9a9ca2b090bf563b03927aba863))
+* disable asdf cache ([6c77fe2](https://github.com/brad-jones/asdf-bootstrap/commit/6c77fe2267cfa4e925606077a3c8f1ce0b9153a6))
+* thats right there are 3 locations for asdf cache ([ed83252](https://github.com/brad-jones/asdf-bootstrap/commit/ed83252529914c17323cd0bcf8c170c4dba2f423))
+
 ### [1.0.5](https://github.com/brad-jones/asdf-bootstrap/compare/v1.0.4...v1.0.5) (2022-02-22)
 
 
