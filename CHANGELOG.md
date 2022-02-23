@@ -1,3 +1,10 @@
+### [1.3.1](https://github.com/brad-jones/asdf-bootstrap/compare/v1.3.0...v1.3.1) (2022-02-23)
+
+
+### Automation
+
+* **deps:** bump @commitlint/cli from 16.1.0 to 16.2.1 ([#36](https://github.com/brad-jones/asdf-bootstrap/issues/36)) ([b7cf334](https://github.com/brad-jones/asdf-bootstrap/commit/b7cf3346ca0941955236ab2ee4f7f6591805ca98))
+
 ## [1.3.0](https://github.com/brad-jones/asdf-bootstrap/compare/v1.2.0...v1.3.0) (2022-02-23)
 
 
