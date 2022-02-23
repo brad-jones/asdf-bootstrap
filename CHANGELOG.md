@@ -1,3 +1,10 @@
+### [1.3.2](https://github.com/brad-jones/asdf-bootstrap/compare/v1.3.1...v1.3.2) (2022-02-23)
+
+
+### Automation
+
+* **deps:** bump @commitlint/config-conventional from 16.0.0 to 16.2.1 ([#37](https://github.com/brad-jones/asdf-bootstrap/issues/37)) ([42a1ca1](https://github.com/brad-jones/asdf-bootstrap/commit/42a1ca16870c30bebfac2a234fa1bb8b9c4b4bff))
+
 ### [1.3.1](https://github.com/brad-jones/asdf-bootstrap/compare/v1.3.0...v1.3.1) (2022-02-23)
 
 
