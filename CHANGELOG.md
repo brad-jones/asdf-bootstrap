@@ -1,3 +1,11 @@
+### [1.3.5](https://github.com/brad-jones/asdf-bootstrap/compare/v1.3.4...v1.3.5) (2022-03-03)
+
+
+### Automation
+
+* **deps:** bump actions/checkout from 2.4.0 to 3 ([#40](https://github.com/brad-jones/asdf-bootstrap/issues/40)) ([d57e56d](https://github.com/brad-jones/asdf-bootstrap/commit/d57e56ddf36a5a94ee3de11cb700249949e4f0da))
+* **deps:** bump actions/setup-node from 2.5.1 to 3 ([#39](https://github.com/brad-jones/asdf-bootstrap/issues/39)) ([850011e](https://github.com/brad-jones/asdf-bootstrap/commit/850011e3b57e7ef14bc38558cebda44b6fe030a3))
+
 ### [1.3.4](https://github.com/brad-jones/asdf-bootstrap/compare/v1.3.3...v1.3.4) (2022-02-23)
 
 
