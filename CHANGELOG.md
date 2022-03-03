@@ -1,3 +1,11 @@
+### [1.3.6](https://github.com/brad-jones/asdf-bootstrap/compare/v1.3.5...v1.3.6) (2022-03-03)
+
+
+### Bug Fixes
+
+* **reinstall:** remove the updated file ([4ca9338](https://github.com/brad-jones/asdf-bootstrap/commit/4ca9338f4dfbc84a5791c5cef2b3d2c665f30b6e))
+* **self-update:** do not run on first run ([f4f0814](https://github.com/brad-jones/asdf-bootstrap/commit/f4f0814a539d45475892925fc25c774a1047873f))
+
 ### [1.3.5](https://github.com/brad-jones/asdf-bootstrap/compare/v1.3.4...v1.3.5) (2022-03-03)
 
 
