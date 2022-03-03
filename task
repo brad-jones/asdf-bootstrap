@@ -523,7 +523,10 @@
         update="1"
       fi
     else
-      update="1"
+      # Bail out if the updated file does not exist,
+      # this suggests it's the first run.
+      date +%s >"${updatedFile}"
+      return
     fi
 
     if [ "${update}" == "1" ]; then
