@@ -138,7 +138,8 @@
       rm -rf "${ASDF_DIR}"
       rm -rf "${ASDF_SCRIPT_DIR}/.asdf/bin"
       rm -rf "${ASDF_SCRIPT_DIR}/.asdf/utils"
-      rm -rf "${ASDF_TOOL_VERSIONS_LOCKFILE}"
+      rm -f "${ASDF_BOOTSTRAP_UPDATED_FILENAME}"
+      rm -f "${ASDF_TOOL_VERSIONS_LOCKFILE}"
     fi
 
     # Install cosign, a CLI tool to interface with https://www.sigstore.dev
