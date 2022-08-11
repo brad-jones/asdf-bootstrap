@@ -46,7 +46,7 @@ jobs:
           token: ${{ steps.generate_token.outputs.token }}
 
       - name: Cache ASDF Tools
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3.0.7
         with:
           key: ${{ runner.os }}-asdf4-${{ hashFiles('task', '.tool-versions', '.tool-versions.lock', '.asdf/.plugin-versions') }}
           restore-keys: ${{ runner.os }}-asdf4-
@@ -65,7 +65,7 @@ jobs:
           node-version: ${{ steps.nodev.outputs.NODE_VERSION }}
 
       - name: Cache Node Modules
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3.0.7
         with:
           key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: ${{ runner.os }}-node-
