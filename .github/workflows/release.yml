@@ -35,7 +35,7 @@ jobs:
       # over the permissions of the token, such as allowing workflows to workflows.
       - id: generate_token
         name: Authenticate as BOT User
-        uses: tibdex/github-app-token@v1.5.1
+        uses: tibdex/github-app-token@v1.7.0
         with:
           app_id: ${{ secrets.BOT_ID }}
           private_key: ${{ secrets.BOT_KEY }}
